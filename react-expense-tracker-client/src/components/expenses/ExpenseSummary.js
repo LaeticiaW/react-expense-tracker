@@ -1,0 +1,116 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import PageHeader from '../common/PageHeader'
+import TableFilter from '../common/TableFilter'
+import ExpenseSummaryTableV from './ExpenseSummaryTable'
+import CategoryService from '../../services/category'
+import ExpenseService from '../../services/expense'
+import DateRangeInput from '../common/DateRangeInput'
+import CategorySelect from '../common/CategorySelect'
+import SnackMsg from '../common/SnackMsg'
+import moment from 'moment'
+
+export default React.memo(function ExpenseSummary() {
+    const snackRef = useRef(null)
+
+    const [filter, setFilter] = useState({
+        categoryIds: [],
+        startDate: moment().startOf('year').format('YYYY-MM-DD'),
+        startDateMs: moment().startOf('year').valueOf(),
+        endDate: moment().endOf('day').format('YYYY-MM-DD'),
+        endDateMs: moment().endOf('day').valueOf()
+    })
+    const [state, setState] = useState({
+        selectCategories: [],
+        expenseTotals: [],
+        totalExpensesAmount: 0,
+        categoryMap: {},
+        expandedRowIds: []
+    })
+
+    // Update state
+    const updateState = (newState) => {
+        setState(state => ({ ...state, ...newState }))
+    }
+
+    // Update filter state
+    const updateFilter = (newFilter) => {
+        setFilter(filter => ({ ...filter, ...newFilter }))
+    }
+ 
+    // Retrieve the summarized expense data      
+    const getExpenseTotals = useCallback(() => {
+        ExpenseService.getExpenseTotals(filter).then((expenseTotals) => {
+            updateState({
+                expenseTotals: expenseTotals,
+                totalExpensesAmount: expenseTotals.reduce((sum, cat) => sum + Number(cat.totalAmount), 0),
+                expandedRowIds: []
+            })
+        }).catch((error) => {
+            console.error('Error retrieving expense totals:', error)
+            snackRef.current.show(true, 'Error retrieving expense summary data')
+        })
+    }, [filter])
+   
+    // Get the categories for the select drop down    
+    const getCategorySelect = useCallback(() => {
+        CategoryService.getCategorySelect().then((selectCategories) => {
+            const categoryMap = selectCategories.reduce((map, cat) => {
+                map[cat.value] = cat.label
+                return map
+            }, {})
+            updateState({
+                selectCategories: selectCategories,
+                categoryMap: categoryMap
+            })
+        }).catch((error) => {
+            console.error('Error retrieving category select:', error)
+            snackRef.current.show(true, 'Error retrieving category select data')
+        })
+    }, [])
+
+    // Retrieve category and expense data on mount and whenever the user changes the filter criteria
+    useEffect(() => {
+        // Retrieve the select categories
+        getCategorySelect()
+
+        // Retrieve the expenses
+        getExpenseTotals()
+    }, [filter, getCategorySelect, getExpenseTotals])
+
+    // Update filter state when a filter date changes
+    const handleDateChange = (startDate, startDateMs, endDate, endDateMs) => {
+        updateFilter({
+            startDate: startDate,
+            startDateMs: startDateMs,
+            endDate: endDate,
+            endDateMs: endDateMs
+        })
+    }
+
+    // Update filter state when the filter category changes
+    const handleCategoryChange = (categoryIds) => {
+        updateFilter({ categoryIds: categoryIds })
+    }
+
+    // Render function for the filter inputs
+    const renderFilterInputs = () => {
+        return (
+            <div>
+                <DateRangeInput startDate={filter.startDate} endDate={filter.endDate} handleDateChange={handleDateChange} />
+                <CategorySelect selectCategories={state.selectCategories} categoryMap={state.categoryMap} handleCategoryChange={handleCategoryChange} />
+            </div>
+        )
+    }
+
+    return (
+        <div>
+            <PageHeader pageTitle="Expense Summary" />
+            <TableFilter renderInputs={renderFilterInputs} />
+            <ExpenseSummaryTableV
+                expenseTotals={state.expenseTotals}
+                totalAmount={state.totalExpensesAmount}
+                expandedRowIds={state.expandedRowIds} />
+            <SnackMsg ref={snackRef} />
+        </div>
+    )
+})
