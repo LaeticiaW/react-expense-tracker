@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardContent, Toolbar, IconButton } from '@material-ui/core'
+import { Card, CardContent, Toolbar, Fab } from '@material-ui/core'
 import { Edit as EditIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import UpdateSubcategoryDialog from './UpdateSubcategoryDialog'
@@ -53,9 +53,10 @@ export default React.memo(function SubcategoryDetails({ subcategory, parentCateg
                 <CardContent classes={{ root: classes.contentRoot }}>
                     <Toolbar className={classes.toolbar}>
                         <h3 className="detailsTitle">Subcategory Details</h3>
-                        <IconButton className={classes.menuButton} onClick={handleShowDialog}>
+                        <Fab size="small" color="primary" onClick={handleShowDialog}
+                            margin="dense" title="Menu">
                             <EditIcon />
-                        </IconButton>
+                        </Fab>
                     </Toolbar>
 
                     <div className={classes.contentContainer}>

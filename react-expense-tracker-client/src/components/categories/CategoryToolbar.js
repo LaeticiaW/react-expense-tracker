@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { IconButton, Toolbar, Menu, MenuItem, Divider } from '@material-ui/core'
-import { Menu as MenuIcon } from '@material-ui/icons'
+import { Toolbar, Menu, MenuItem, Divider, Fab } from '@material-ui/core'
+import { MoreVert as MoreVertIcon } from '@material-ui/icons'
 import AddCategoryDialog from './AddCategoryDialog'
 import AddSubcategoryDialog from './AddSubcategoryDialog'
 import CategoryService from '../../services/category'
@@ -161,9 +161,10 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
     return (
         <>
             <Toolbar className={classes.toolbar}>
-                <IconButton edge="start" className={classes.menuButton} onClick={handleClickMenu}>
-                    <MenuIcon />
-                </IconButton>
+                <Fab size="small" color="primary" onClick={handleClickMenu} className={classes.menuButton}
+                    margin="dense" title="Menu">
+                    <MoreVertIcon />
+                </Fab>              
                 <Menu id="simple-menu" anchorEl={menuAnchorEl} keepMounted
                     open={Boolean(menuAnchorEl)} onClose={handleCloseMenu}>
                     <MenuItem key="1" onClick={showAddCategoryDialog}>Add Category</MenuItem>
