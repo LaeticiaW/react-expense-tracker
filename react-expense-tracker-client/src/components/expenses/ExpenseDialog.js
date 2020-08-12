@@ -41,13 +41,12 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
         subcategories: [],
         categoryMap: {},
         formSaved: false,
-        expense: { ...defaultExpense }
+        expense: { ...defaultExpense },
+        isCreate: false
     })
     const [errors, setErrors] = useState({})
     const [dialogMsg, setDialogMsg] = useState('')
-
-    let isCreate = false
-
+    
     // Update state
     const updateState = (newState) => {
         setState(state => ({ ...state, ...newState }))
@@ -62,8 +61,9 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
     }
 
     // Initialize state whenever the dialog opens
-    const handleOpen = () => {
-        isCreate = dialogExpense === null
+    const handleOpen = () => {       
+        let isCreate = dialogExpense === null
+       
         const initialExpense = isCreate ? getDefaultExpense() : dialogExpense
        
         initialExpense.categoryId = initialExpense.categoryId || ''
@@ -71,7 +71,7 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
 
         // Initialize variables                
         updateState({
-            formSaved: false, dialogMsg: '', categoryMap: {}, categories: [],
+            isCreate: isCreate, formSaved: false, dialogMsg: '', categoryMap: {}, categories: [],
             subcategories: [], expense: { ...initialExpense }
         })
         setErrors(defaultErrors)
@@ -94,7 +94,7 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
             }
 
             // For update mode get the subcategory select list for the specified category
-            if (!isCreate && initialExpense.categoryId) {
+            if (!state.isCreate && initialExpense.categoryId) {
                 const category = catMap[initialExpense.categoryId]
                 newState.subcategories = category.subcategories
             }
@@ -169,10 +169,10 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
             })
         }
     }
-    
+        
     return (
         <Dialog open={open} onEnter={handleOpen} maxWidth="sm">
-            <DialogTitle className={classes.dialogTitle}>{isCreate ? 'Add Expense' : 'Update Expense'}</DialogTitle>
+            <DialogTitle className={classes.dialogTitle}>{state.isCreate ? 'Add Expense' : 'Update Expense'}</DialogTitle>
             <Divider />
             <DialogContent>
                 <div className={classes.dialogMsg}>{dialogMsg}</div>

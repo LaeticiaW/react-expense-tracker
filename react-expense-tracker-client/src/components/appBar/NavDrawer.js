@@ -55,11 +55,11 @@ export default function NavDrawer() {
         })
 
         return (
-            <div className="nav-drawer-list">
+            <nav className="nav-drawer-list">
                 <List>
                     {routeList}
                 </List>
-            </div>
+            </nav>
         )
     }
 

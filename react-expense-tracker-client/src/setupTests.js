@@ -3,3 +3,14 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
+
+const originalError = console.error
+//beforeAll(() => {  
+    // Get rid of unnecessary warning
+    console.error = (...args) => {
+        if (/Warning.*not wrapped in act/.test(args[0])) {
+            return
+        }
+        originalError.call(console, ...args)
+    }
+//})

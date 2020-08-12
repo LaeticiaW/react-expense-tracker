@@ -6,13 +6,13 @@ import NavDrawer from './NavDrawer'
 export default function AppHeader() {
   
   return (    
-      <div>
+      <header>
         <AppBar position="fixed" className="app-header">       
           <Toolbar>               
             <NavDrawer/>
             <h3 className="app-title">Expense Tracker</h3>      
           </Toolbar>
         </AppBar>
-      </div>    
+      </header>    
   )
 }

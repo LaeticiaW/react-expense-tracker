@@ -5,7 +5,8 @@ const useStyles = makeStyles(theme => ({
     pageTitle: {
         fontSize: '1.25rem',
         fontWeight: 'bold',
-        padding: '0px 8px 8px 0px'
+        padding: '0px 8px 8px 0px',
+        margin: '0px'
     }
   }))
 
@@ -13,7 +14,7 @@ export default React.memo(function PageHeader({pageTitle}) {
     const classes = useStyles()
    
     return (
-        <div className={classes.pageTitle}>{pageTitle}</div>
+        <h2 className={classes.pageTitle} role="heading">{pageTitle}</h2>
     )
 }, (prevProps, nextProps) => {
     return prevProps.pageTitle === nextProps.pageTitle

@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     container: {
         height: 'calc(100vh - 240px)',
         '& > *': {            // for react grid virtualization when want table to fill container
-            height: '100%'
+            height: '100%'          
         },
         border: 'solid 1px #efefef'
     }

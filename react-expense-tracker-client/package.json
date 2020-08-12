@@ -10,16 +10,18 @@
     "@material-ui/core": "4.10.2",
     "@material-ui/icons": "4.9.1",
     "@material-ui/pickers": "3.2.10",
-    "@testing-library/jest-dom": "4.2.4",
-    "@testing-library/react": "9.5.0",
-    "@testing-library/user-event": "7.2.1",
     "@welldone-software/why-did-you-render": "4.2.6",
     "axios": "0.19.2",
     "clsx": "1.1.1",
+    "flush-promises": "1.0.2",
     "fontsource-roboto": "2.1.4",
     "highcharts": "8.1.2",
     "highcharts-react-official": "3.0.0",
+    "jest-environment-jsdom-sixteen": "1.0.3",
     "moment": "2.27.0",
+    "moxios": "0.4.0",
+    "mq-polyfill": "1.1.8",
+    "msw": "0.20.4",
     "node-sass": "4.14.1",
     "numeral": "2.0.6",
     "react": "^16.13.1",
@@ -30,10 +32,15 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1"
   },
+  "devDependencies": {
+    "@testing-library/jest-dom": "4.2.4",
+    "@testing-library/react": "10.4.8",
+    "@testing-library/user-event": "7.2.1"
+  },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --runInBand --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

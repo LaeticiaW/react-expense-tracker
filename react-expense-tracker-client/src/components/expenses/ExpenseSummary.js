@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import PageHeader from '../common/PageHeader'
 import TableFilter from '../common/TableFilter'
-import ExpenseSummaryTableV from './ExpenseSummaryTable'
+import ExpenseSummaryTable from './ExpenseSummaryTable'
 import CategoryService from '../../services/category'
 import ExpenseService from '../../services/expense'
 import DateRangeInput from '../common/DateRangeInput'
@@ -36,10 +36,10 @@ export default React.memo(function ExpenseSummary() {
     const updateFilter = (newFilter) => {
         setFilter(filter => ({ ...filter, ...newFilter }))
     }
- 
+
     // Retrieve the summarized expense data      
     const getExpenseTotals = useCallback(() => {
-        ExpenseService.getExpenseTotals(filter).then((expenseTotals) => {
+        ExpenseService.getExpenseTotals(filter).then((expenseTotals) => {                        
             updateState({
                 expenseTotals: expenseTotals,
                 totalExpensesAmount: expenseTotals.reduce((sum, cat) => sum + Number(cat.totalAmount), 0),
@@ -50,7 +50,7 @@ export default React.memo(function ExpenseSummary() {
             snackRef.current.show(true, 'Error retrieving expense summary data')
         })
     }, [filter])
-   
+
     // Get the categories for the select drop down    
     const getCategorySelect = useCallback(() => {
         CategoryService.getCategorySelect().then((selectCategories) => {
@@ -106,7 +106,7 @@ export default React.memo(function ExpenseSummary() {
         <div>
             <PageHeader pageTitle="Expense Summary" />
             <TableFilter renderInputs={renderFilterInputs} />
-            <ExpenseSummaryTableV
+            <ExpenseSummaryTable
                 expenseTotals={state.expenseTotals}
                 totalAmount={state.totalExpensesAmount}
                 expandedRowIds={state.expandedRowIds} />

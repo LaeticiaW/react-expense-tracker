@@ -132,7 +132,7 @@ export default React.memo(function Expenses() {
         return (
             <div>
                 <Fab size="small" color="primary" onClick={handleOpenDialog} className="add-expense-btn"
-                    margin="dense" title="Add Expense">
+                    margin="dense" title="Add Expense" role="button">
                     <AddIcon />
                 </Fab>
             </div>

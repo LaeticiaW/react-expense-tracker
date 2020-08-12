@@ -119,9 +119,9 @@ export default function App() {
                     <Router history={history}>
                         <CssBaseline />
                         <AppHeader />
-                        <div className={classes.appContent}>
+                        <main className={classes.appContent}>
                             {routes()}
-                        </div>
+                        </main>
                     </Router>
                 </div>
             </MuiPickersUtilsProvider>

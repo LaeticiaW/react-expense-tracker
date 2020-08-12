@@ -19,7 +19,7 @@ export default React.memo(function TableFilter({renderInputs, renderActions}) {
   const classes = useStyles()
     
   return (         
-        <Toolbar className={classes.toolbar}>  
+        <Toolbar className={classes.toolbar} role="toolbar">  
             <div className={classes.leftItems}>
                 {renderInputs()}   
             </div>                     
