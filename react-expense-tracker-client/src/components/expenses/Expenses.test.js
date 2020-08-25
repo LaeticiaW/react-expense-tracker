@@ -4,9 +4,7 @@ import { categoriesData, expensesData } from 'dataUtils'
 import '@testing-library/jest-dom/extend-expect'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-
 import Expenses from './Expenses'
-import { jssPreset } from '@material-ui/core'
 
 describe('Expenses.js', () => {
 
