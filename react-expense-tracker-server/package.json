@@ -8,7 +8,7 @@
     "start-watch": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create-db": "mongo database/createDb.js",
-    "load-data": "database/setImportPermissions.sh; database/importCategories.sh; database/importExpenses.sh"
+    "load-data": "database/setImportPermissions.sh; database/importCategories.sh; database/importExpenses.sh; database/importUsers.sh"
   },
   "keywords": [],
   "author": "",

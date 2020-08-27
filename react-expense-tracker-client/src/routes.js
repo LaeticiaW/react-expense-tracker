@@ -1,4 +1,5 @@
 import React from 'react'
+import Login from './components/login/Login'
 import Dashboard from './components/dashboard/Dashboard'
 import Categories from './components/categories/Categories'
 import Expenses from './components/expenses/Expenses'
@@ -15,7 +16,12 @@ export const NavRoutes = [
         name: 'Home',
         path: '/', 
         redirectTo: '/dashboard',       
-        meta: { redirect: true, hidden: true }       
+        meta: { redirect: true, hidden: true }  
+    }, {
+        name: 'Login',
+        path: '/login',  
+        component: Login,     
+        meta: { hidden: true }    
     }, {
         name: 'Dashboard',
         path: '/dashboard',  

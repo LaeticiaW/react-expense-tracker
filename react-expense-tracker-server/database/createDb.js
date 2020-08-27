@@ -6,3 +6,4 @@ expenseTrackerDB.imports.drop();
 expenseTrackerDB.createCollection("categories");
 expenseTrackerDB.createCollection("expenses");
 expenseTrackerDB.createCollection("imports");
+expenseTrackerDB.createCollection('users');

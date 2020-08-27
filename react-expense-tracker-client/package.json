@@ -18,6 +18,8 @@
     "highcharts": "8.1.2",
     "highcharts-react-official": "3.0.0",
     "jest-environment-jsdom-sixteen": "1.0.3",
+    "mobx": "5.15.6",
+    "mobx-react-lite": "2.1.0",
     "moment": "2.27.0",
     "moxios": "0.4.0",
     "mq-polyfill": "1.1.8",

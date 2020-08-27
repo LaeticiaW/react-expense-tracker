@@ -36,8 +36,7 @@ export default React.memo(function Categories() {
     const [state, setState] = useState({
         categories: [],
         categoryMap: {},
-        subcategoryMap: {},
-        menuAnchorEl: null
+        subcategoryMap: {}       
     })
 
     // Lifted state for the CategoryTable component

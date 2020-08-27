@@ -98,8 +98,8 @@ export default React.memo(function Imports() {
     const renderFilterActions = () => {
         return (
             <>
-                <Fab size="small" color="primary" onClick={handleOpenDialog} className="add-expense-btn"
-                    margin="dense" title="Add Expense">
+                <Fab size="small" color="primary" onClick={handleOpenDialog} className="import-expenses-btn"
+                    margin="dense" title="Import Expenses">
                     <PublishIcon />
                 </Fab>
                 <ImportDialog open={state.dialogOpen} handleClose={handleCloseDialog} />

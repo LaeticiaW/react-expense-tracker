@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import {Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton} from '@material-ui/core'
-import {Menu as MenuIcon} from '@material-ui/icons'
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton } from '@material-ui/core'
+import { Menu as MenuIcon } from '@material-ui/icons'
 import { NavRoutes } from '../../routes.js'
 import { Link } from "react-router-dom"
+import { UserStoreContext } from '../../stores/UserStore'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,10 +35,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavDrawer() {
     const classes = useStyles()
+    const userStore = useContext(UserStoreContext)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
 
-    const toggleDrawer = () => {       
+    const toggleDrawer = () => {
         setDrawerOpen(!drawerOpen)
     }
 
@@ -65,10 +67,14 @@ export default function NavDrawer() {
 
     return (
         <div className="nav-drawer">
-            <IconButton onClick={toggleDrawer} className={classes.menuButton}><MenuIcon /></IconButton>
-            <Drawer open={drawerOpen} classes={{ paper: classes.drawerPaper }} BackdropProps={{ invisible: true }}>
-                {list()}
-            </Drawer>
+            {userStore.loggedInUserId &&
+                <>
+                    <IconButton onClick={toggleDrawer} className={classes.menuButton}><MenuIcon /></IconButton>
+                    <Drawer open={drawerOpen} classes={{ paper: classes.drawerPaper }} BackdropProps={{ invisible: true }}>
+                        {list()}
+                    </Drawer>
+                </>
+            }
         </div>
     )
 }

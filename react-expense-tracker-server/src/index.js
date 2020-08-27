@@ -3,6 +3,7 @@ let app = express()
 let categoryRoute = require('./routes/category')
 let expenseRoute = require('./routes/expense')
 let importRoute = require('./routes/import')
+let userRoute = require('./routes/user')
 let bodyParser = require('body-parser')
 let db = require('./db.js')
 let cors = require('cors')
@@ -36,6 +37,7 @@ app.use(express.static('public'))
 app.use(categoryRoute)
 app.use(expenseRoute)
 app.use(importRoute)
+app.use(userRoute)
 
 // Start server on specified port
 const PORT = process.env.PORT || 3000

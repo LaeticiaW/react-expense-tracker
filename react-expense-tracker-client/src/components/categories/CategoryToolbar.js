@@ -165,8 +165,11 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
                     margin="dense" title="Menu">
                     <MoreVertIcon />
                 </Fab>              
-                <Menu id="simple-menu" anchorEl={menuAnchorEl} keepMounted
-                    open={Boolean(menuAnchorEl)} onClose={handleCloseMenu}>
+                <Menu id="category-menu" anchorEl={menuAnchorEl} keepMounted
+                    open={Boolean(menuAnchorEl)} onClose={handleCloseMenu}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
                     <MenuItem key="1" onClick={showAddCategoryDialog}>Add Category</MenuItem>
                     <MenuItem key="2" onClick={showAddSubcategoryDialog}>Add Subcategory</MenuItem>
                     <MenuItem key="3" onClick={confirmDelete}>Delete</MenuItem>

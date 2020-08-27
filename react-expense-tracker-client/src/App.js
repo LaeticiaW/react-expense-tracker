@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppHeader from './components/appBar/AppHeader'
 import { Router, Route, Redirect } from "react-router-dom"
@@ -8,6 +9,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
+import { UserStoreContext } from './stores/UserStore'
 import { makeStyles } from '@material-ui/core/styles'
 
 const history = createBrowserHistory();
@@ -79,8 +81,6 @@ const theme = createMuiTheme({
         },
         MuiFormControl: {
             root: {
-
-
             }
         }
     }
@@ -93,12 +93,18 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function App() {
+export const App = observer(() => {
     const classes = useStyles()
+    const userStore = useContext(UserStoreContext)
 
-    // Create the application route elements
+    useEffect(() => {
+        userStore.getCurrentUser()
+    }, [])
+
+    // Create the application route elements.  If user is not logged in, then redirect to Login page
     const routes = () => {
-        const navRoutes = NavRoutes.map(route => {
+        let navRoutes
+        navRoutes = NavRoutes.map(route => {
             if (!route.meta.redirect) {
                 return <Route path={route.path} component={route.component} key={route.name} />
             } else {
@@ -109,6 +115,7 @@ export default function App() {
                 )
             }
         })
+
         return navRoutes
     }
 
@@ -119,12 +126,15 @@ export default function App() {
                     <Router history={history}>
                         <CssBaseline />
                         <AppHeader />
-                        <main className={classes.appContent}>
-                            {routes()}
-                        </main>
+                        {userStore.isUserRetrieved &&
+                            <main className={classes.appContent}>
+                                {routes()}
+                                {!userStore.loggedInUserId && <Redirect to="/login" />}
+                            </main>
+                        }
                     </Router>
                 </div>
             </MuiPickersUtilsProvider>
         </ThemeProvider>
     )
-}
+})

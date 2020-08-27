@@ -14,7 +14,7 @@ export default React.memo(function PageHeader({pageTitle}) {
     const classes = useStyles()
    
     return (
-        <h2 className={classes.pageTitle} role="heading">{pageTitle}</h2>
+        <h2 className={classes.pageTitle}>{pageTitle}</h2>
     )
 }, (prevProps, nextProps) => {
     return prevProps.pageTitle === nextProps.pageTitle
