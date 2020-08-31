@@ -22,14 +22,17 @@ The client web application is written in Javascript, React, Material-UI, Axios, 
 ## Dependencies
 * Node and npm, which can be installed from https://nodejs.org/en/download/
 * MongoDB, which can be installed from https://docs.mongodb.com/manual/installation/ and configured to run on port 27017
+Mongo Database Tools, which can be installed from https://www.mongodb.com/try/download/database-tools
 
 ## Install and run the React Expense Tracker web app in Developer mode
 
 These install instructions were tested on Mac/OS and may need to be tweaked for Windows environment.
 
 Before starting
->**Make sure that node and npm have been installed.
->Also make sure that MongoDB is running locally on port 27017.  The mongo shell command should be in the user path.**
+
+* Make sure that node and npm have been installed
+* Also make sure that MongoDB is running locally on port 27017 
+* Verify that the mongodb and mongo database tools bin directories are in the user path (for mongo and mongoimport cmds)
 
 Clone the react-expense-tracker code
 ```shell
@@ -49,6 +52,7 @@ npm run install-client
 
 Create the expenseTracker MongoDB collections and load sample data.
 ```shell
+npm run set-permissions (only needed for linux environments, not windows)
 npm run initialize-db
 npm run load-data
 ```

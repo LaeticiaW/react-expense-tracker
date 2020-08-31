@@ -75,12 +75,11 @@ export default function Login() {
                     <Button className={classes.loginButton} size="small" variant="contained"
                         onClick={handleLogin} color="primary">
                         Login
-                        </Button>
+                    </Button>
                 </form>
             </div>
 
             { toDashboard && (<Redirect to='/dashboard' />) }              
         </div>
     )
-
 }
