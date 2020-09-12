@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { Redirect } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import PageHeader from '../common/PageHeader'
 import { UserStoreContext } from '../../stores/UserStore'
 import UserService from '../../services/user'
 import FormSelect from '../common/form/FormSelect'
 import { makeStyles } from '@material-ui/core/styles'
+import useRouter from '../../customHooks/useRouter'
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -21,12 +21,12 @@ const useStyles = makeStyles(theme => ({
 export default function Login() {
     const classes = useStyles()
     const userStore = useContext(UserStoreContext)
+    const router = useRouter()
 
     const [userId, setUserId] = useState('')
     const [users, setUsers] = useState([])
     const [errors, setErrors] = useState({})
-    const [toDashboard, setToDashboard] = useState(false)
-
+    
     // Retrieve the list of users
     const getUsers = useCallback(() => {
         UserService.getUsers().then(users => {
@@ -57,8 +57,8 @@ export default function Login() {
     // Login the user
     const handleLogin = () => {
         if (validateField('userId', userId)) {            
-            userStore.login(userId).then(() => {               
-                setToDashboard(true)
+            userStore.login(userId).then(() => {  
+                router.push('/dashboard')                           
             })
         }       
     }
@@ -78,8 +78,7 @@ export default function Login() {
                     </Button>
                 </form>
             </div>
-
-            { toDashboard && (<Redirect to='/dashboard' />) }              
+                          
         </div>
     )
 }

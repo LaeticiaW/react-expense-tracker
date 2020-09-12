@@ -30,8 +30,7 @@ const useStyles = makeStyles(theme => ({
 export default React.memo(function Categories() {
     const classes = useStyles()
     const snackRef = useRef(null)
-    let init = useRef(null)
-
+  
     // This component's state
     const [state, setState] = useState({
         categories: [],
@@ -71,21 +70,12 @@ export default React.memo(function Categories() {
 
     // Retrieve the category data
     const getCategories = useCallback(() => {        
-        CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => {
-            if (!init.current) {
-                init.current = true
-                updateState({
-                    categories: categories,
-                    categoryMap: categoryMap,
-                    subcategoryMap: subcategoryMap
-                })
-            } else {
-                updateState({
-                    categories: categories,
-                    categoryMap: categoryMap,
-                    subcategoryMap: subcategoryMap
-                })
-            }
+        CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => {            
+            updateState({
+                categories: categories,
+                categoryMap: categoryMap,
+                subcategoryMap: subcategoryMap
+            })            
         }).catch((error) => {
             console.error('Error retreiving categories:', error)
             snackRef.current.show(true, 'Error retrieving categories')

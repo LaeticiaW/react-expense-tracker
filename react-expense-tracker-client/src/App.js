@@ -99,9 +99,9 @@ export const App = observer(() => {
 
     useEffect(() => {
         userStore.getCurrentUser()
-    }, [])
+    }, [userStore])
 
-    // Create the application route elements.  If user is not logged in, then redirect to Login page
+    // Create the application route elements.  
     const routes = () => {
         let navRoutes
         navRoutes = NavRoutes.map(route => {
@@ -118,7 +118,7 @@ export const App = observer(() => {
 
         return navRoutes
     }
-
+   
     return (
         <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -126,6 +126,7 @@ export const App = observer(() => {
                     <Router history={history}>
                         <CssBaseline />
                         <AppHeader />
+                        {/* If user is not logged in, then redirect to Login page */}
                         {userStore.isUserRetrieved &&
                             <main className={classes.appContent}>
                                 {routes()}

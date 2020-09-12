@@ -33,7 +33,6 @@ export default React.memo(function CategoryTable({ tableState, updateTableState,
 
     // When the category list is first retrieved, set the selected category.  Every time the category list
     // changes, reset the selected category and subcategory to the current data.
-
     useEffect(() => {
         if (categories.length && !tableState.selectedCategory && !tableState.selectedSubcategory) {
             updateTableState({
