@@ -3,6 +3,7 @@ import { createContext } from 'react'
 import UserService from '../services/user'
 
 class UserStore {
+    // Store data
     currentUser = {
         id: '',
         firstName: '',
@@ -47,6 +48,7 @@ class UserStore {
         return this.currentUser && this.currentUser.id ? this.currentUser.id.substr(0, 1).toUpperCase() : ''       
     } 
     
+    // Returns the user name (first and last)
     get userName() {
         return this.currentUser && this.currentUser.id ? this.currentUser.firstName + this.currentUser.lastName : '' 
     }
