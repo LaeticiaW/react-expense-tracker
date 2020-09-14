@@ -19,7 +19,8 @@ export default React.memo(function AddSubcategoryDialog({ open, onClose, categor
         subcategoryName: '',     
         errors: { subcategoryName: '' },
         dialogMsg: '',
-        focus: true
+        focus: true,
+        isSaving: false
     })
 
     // Update state
@@ -54,6 +55,7 @@ export default React.memo(function AddSubcategoryDialog({ open, onClose, categor
     // Save the category and close the dialog
     const handleSave = () => {
         if (validate()) {
+            updateState({isSaving: true})
             const newCategory = JSON.parse(JSON.stringify(category))
             const newSubcategory = {
                 id: uuidv4(),
@@ -71,6 +73,8 @@ export default React.memo(function AddSubcategoryDialog({ open, onClose, categor
             }).catch((error) => {
                 console.error('Error creating subcategory:', error)
                 updateState({ dialogMsg: 'Error creating the Subcategory' })
+            }).finally(() => {
+                updateState({isSaving: false})
             })
         }
     }
@@ -109,7 +113,7 @@ export default React.memo(function AddSubcategoryDialog({ open, onClose, categor
                 <Divider />
                 <DialogActions>
                     <Button onClick={handleCancel} color="default">Cancel</Button>
-                    <Button onClick={handleSave} color="primary">Save</Button>
+                    <Button onClick={handleSave} color="primary" disabled={state.isSaving}>Save</Button>
                 </DialogActions>
             </Dialog>
         </div>

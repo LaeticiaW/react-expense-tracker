@@ -19,12 +19,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function CategoryToolbar({ tableState, updateTableState, toolbarState, updateToolbarState,
-    categories, getCategories }) {
-
+export default React.memo(function CategoryToolbar({ dispatch, state, getCategories }) {
     const classes = useStyles()
     const snackRef = useRef(null)
-
+   
     const [menuAnchorEl, setMenuAnchorEl] = useState(null)
     const [openAddCategoryDialog, setOpenAddCategoryDialog] = useState(false)
 
@@ -46,19 +44,15 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
 
     // Show the add subcategory dialog
     const showAddSubcategoryDialog = () => {
-        handleCloseMenu()
-        updateToolbarState({ openAddSubcategoryDialog: true })
+        handleCloseMenu()        
+        dispatch({ type: 'show-add-subcategory-dialog'})
     }
 
     // Close the add category dialog, select this category in the table, and retrieve the category list again
     const handleCloseAddCategoryDialog = (newCategory) => {
         setOpenAddCategoryDialog(false)
-        if (newCategory) {
-            updateTableState({
-                selectedCategory: newCategory,
-                selectedSubcategory: null,
-                selectedItemIds: [newCategory._id]
-            })
+        if (newCategory) { 
+            dispatch({type: 'add-category', payload: { category: newCategory }})           
             getCategories()
             snackRef.current.show(false, 'Category added successfully')
         }
@@ -66,48 +60,48 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
 
     // Close the add subcategory dialog and retrieve the category list again
     const handleCloseAddSubcategoryDialog = (newSubcategory) => {
-        updateToolbarState({ openAddSubcategoryDialog: false })
+        dispatch({type: 'close-add-subcategory-dialog'})       
         if (newSubcategory) {
             getCategories()
             if (!isExpanded(newSubcategory.parentCategoryId)) {
-                updateTableState({ expandedRowIds: tableState.expandedRowIds.concat([newSubcategory.parentCategoryId]) })
+                dispatch({type: 'reset-expanded-rows', payload: { categoryId: newSubcategory.parentCategoryId }})                
             }
             snackRef.current.show(false, 'Subcategory added successfully')
         }
     }
 
     // Determines if the specified category is currently expanded
-    const isExpanded = (categoryId) => {
-        return tableState.expandedRowIds.filter(item => item._id === categoryId).length > 0
+    const isExpanded = (categoryId) => {        
+        return state.expandedRowIds.filter(itemId => itemId === categoryId).length > 0
     }
 
     // Expand all categories in the tree
     const handleExpandAll = () => {
         handleCloseMenu()
-        updateTableState({ expandedRowIds: categories.map(cat => cat._id) })
+        dispatch({type: 'expand-all'})        
     }
 
     // Collapse all categories in the tree
     const handleCollapseAll = () => {
         handleCloseMenu()
-        updateTableState({ expandedRowIds: [] })
+        dispatch({type: 'collapse-all'})        
     }
 
     // Open the confirm delete dialog
     const confirmDelete = () => {
         handleCloseMenu()
-        updateToolbarState({ confirmDialogOpen: true })
+        dispatch({type: 'confirm-delete'})        
     }
 
     // Cancel the confirm delete dialog
     const handleCancelConfirm = () => {
-        updateToolbarState({ confirmDialogOpen: false })
+        dispatch({type: 'cancel-confirm-delete'})        
     }
     
     // Delete the selected Category or Subcategory   
     const handleDelete = () => {
-        updateToolbarState({ confirmDialogOpen: false })
-        if (tableState.selectedSubcategory) {
+        handleCancelConfirm()        
+        if (state.selectedSubcategory) {
             deleteSubcategory()
         } else {
             deleteCategory()
@@ -116,13 +110,12 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
     
     // Delete the selected Category   
     const deleteCategory = () => {
-        CategoryService.deleteCategory(tableState.selectedCategory._id).then(() => {
-            updateTableState({ selectedCategory: null })
+        CategoryService.deleteCategory(state.selectedCategory._id).then(() => {
+            dispatch({type: 'delete-category'})            
             getCategories()
             snackRef.current.show(false, 'Category deleted successfully')
         }).catch((error) => {
-            console.error('Error deleting category:', error)
-            console.error('Error deleting category2:', error.data)
+            console.error('Error deleting category:', error)            
             if (error && error.data && error.data === 'Category in use') {
                 snackRef.current.show(true, 'Category cannot be deleted because it is already assigned to expenses')
             } else {
@@ -133,22 +126,18 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
     
      // Delete the subcategory from the category object and then save the category    
     const deleteSubcategory = () => {
-        let idx = categories.findIndex((cat) => cat.treeId === tableState.selectedSubcategory.parentTreeId)
+        let idx = state.categories.findIndex((cat) => cat.treeId === state.selectedSubcategory.parentTreeId)
         if (idx !== -1) {
             // Remove the subcategory from the category object
-            const category = categories[idx]
-            idx = category.subcategories.findIndex((subcat) => subcat.treeId === tableState.selectedSubcategory.treeId)
+            const category = state.categories[idx]
+            idx = category.subcategories.findIndex((subcat) => subcat.treeId === state.selectedSubcategory.treeId)
             if (idx !== -1) {
                 category.subcategories.splice(idx, 1)
             }
 
             // Save the category to the db
-            CategoryService.updateCategory(category).then((cat) => {               
-                updateTableState({
-                    selectedSubcategory: null,
-                    selectedCategory: cat,
-                    selectedItemIds: [cat._id]
-                })
+            CategoryService.updateCategory(category).then((cat) => {  
+                dispatch({type: 'delete-subcategory', payload: { category: cat }})                           
                 getCategories()
                 snackRef.current.show(false, "Subcategory deleted successfully")
             }).catch((error) => {
@@ -179,11 +168,12 @@ export default React.memo(function CategoryToolbar({ tableState, updateTableStat
                 </Menu>
             </Toolbar>
 
-            <AddCategoryDialog open={openAddCategoryDialog} onClose={handleCloseAddCategoryDialog} />
-            <AddSubcategoryDialog open={toolbarState.openAddSubcategoryDialog} onClose={handleCloseAddSubcategoryDialog}
-                category={tableState.selectedCategory} />
+            <AddCategoryDialog open={openAddCategoryDialog} onClose={handleCloseAddCategoryDialog} categoryState={state} />
 
-            <ConfirmDialog open={toolbarState.confirmDialogOpen}
+            <AddSubcategoryDialog open={state.openAddSubcategoryDialog} onClose={handleCloseAddSubcategoryDialog}
+                category={state.selectedCategory} />
+
+            <ConfirmDialog open={state.openConfirmDeleteDialog}
                 title="Confirm Delete" msg="Are you sure you want to delete the selected item?"
                 onCancel={handleCancelConfirm} onConfirm={handleDelete} />
 

@@ -41,7 +41,7 @@ export default React.memo(function ExpensesOverTimeChart({ options }) {
             setChartOptions(getChartOptions(series))
         }).catch((error) => {
             console.error('Error retrieving expense time series:', error)
-            // this.$refs.snack.show('Error retrieving data for Expenses Over Time dashlet')
+            snackRef.current.show(true, 'Error retrieving data for Expenses Over Time dashlet')            
         })
     }, [filter])
 

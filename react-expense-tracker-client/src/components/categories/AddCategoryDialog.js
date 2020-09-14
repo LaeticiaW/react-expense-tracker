@@ -3,7 +3,6 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider } fr
 import CategoryService from '../../services/category'
 import { makeStyles } from '@material-ui/core/styles'
 import FormTextField from '../common/form/FormTextField'
-import { TurnedInOutlined } from '@material-ui/icons'
 
 const useStyles = makeStyles(theme => ({
     dialogMsg: {
@@ -11,16 +10,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function AddCategoryDialog({ open, onClose }) {
+export default React.memo(function AddCategoryDialog({ open, onClose, categoryState }) {
     const classes = useStyles()
     const formRef = useRef(null)
 
     const [state, setState] = useState({
-        categoryName: '',
-        isCategoryUnique: true,
+        categoryName: '',       
         errors: { categoryName: '' },
         dialogMsg: '',
-        focus: true
+        focus: true,
+        isSaving: false
     })
 
     // Update the state
@@ -30,7 +29,7 @@ export default React.memo(function AddCategoryDialog({ open, onClose }) {
 
     // Initialize state every time the dialog opens
     const handleOpen = () => {
-        updateState({ dialogMsg: '', categoryName: '', errors: { categoryName: '' }, isCategoryUnique: true, focus: TurnedInOutlined })
+        updateState({ dialogMsg: '', categoryName: '', errors: { categoryName: '' }, focus: true })
     }
 
     // Turn off field focus after dialog is opened
@@ -53,16 +52,19 @@ export default React.memo(function AddCategoryDialog({ open, onClose }) {
         }
 
         if (validate()) {
+            updateState({isSaving: true})
             CategoryService.createCategory(category).then((cat) => {
                 // Close the dialog
                 onClose(cat)
             }).catch((error) => {
                 if (error && error.data && error.data.errmsg && error.data.errmsg.indexOf('duplicate') !== -1) {
-                    updateState({ isCategoryUnique: false })
+                    updateState({ dialogMsg: 'Category name is not unique' })
                 } else {
                     console.error('Error creating category:', error)
                     updateState({ dialogMsg: 'Error creating the Category' })
                 }
+            }).finally(() => {
+                updateState({isSaving: false})
             })
         }
     }
@@ -72,6 +74,15 @@ export default React.memo(function AddCategoryDialog({ open, onClose }) {
         updateState({ dialogMsg: '', errors: {...state.errors, categoryName: '' }})          
         if (!newState.categoryName) {                  
             updateState({ errors: { categoryName: "Value is required" } })
+            return false
+        }
+        // Verify that the category name is not already in the category list.  Note that this check
+        // also occurs on the server
+        const dupCategories = categoryState.categories.filter(cat => {
+            return cat.name.toLowerCase() === newState.categoryName.toLowerCase()
+        })        
+        if (dupCategories.length) {
+            updateState( {errors: {categoryName: "Category Name is not unique"}})
             return false
         }
         return true
@@ -92,7 +103,7 @@ export default React.memo(function AddCategoryDialog({ open, onClose }) {
                 <Divider />
                 <DialogActions>
                     <Button onClick={() => onClose(false)} color="default">Cancel</Button>
-                    <Button onClick={handleSave} color="primary">Save</Button>
+                    <Button onClick={handleSave} color="primary" disabled={state.isSaving}>Save</Button>
                 </DialogActions>
             </Dialog>
         </div>

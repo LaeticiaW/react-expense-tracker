@@ -38,7 +38,8 @@ export default React.memo(function UpdateSubcategoryDialog({ open, onClose, subc
         dialogMsg: '',
         dialogSubcategory: { name: '', matchText: [] },
         newMatchText: '',
-        focus: true
+        focus: true,
+        isSaving: false
     })
     const [errors, setErrors] = useState({ name: '', newMatchText: '' })
 
@@ -123,11 +124,14 @@ export default React.memo(function UpdateSubcategoryDialog({ open, onClose, subc
                     category.subcategories[index] = state.dialogSubcategory
                     Util.sortArray(category.subcategories, 'name')  
 
+                    updateState({isSaving: true})
                     CategoryService.updateCategory(category).then(() => {                      
                         onClose(true)
                     }).catch((error) => {
                         console.error('Error saving subcategory:', error)
-                        this.dialogMessage = 'Error saving the Subcategory'
+                        updateState({dialogMessage: 'Error saving the Subcategory'})
+                    }).finally(() => {
+                        updateState({isSaving: false})
                     })
                 }
             }
@@ -210,7 +214,7 @@ export default React.memo(function UpdateSubcategoryDialog({ open, onClose, subc
                 <Divider />
                 <DialogActions>
                     <Button onClick={() => onClose(false)} color="default">Cancel</Button>
-                    <Button onClick={handleSave} color="primary">Save</Button>
+                    <Button onClick={handleSave} color="primary" disabled={state.isSaving}>Save</Button>
                 </DialogActions>
             </Dialog>        
     )

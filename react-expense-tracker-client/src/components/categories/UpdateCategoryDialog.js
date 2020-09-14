@@ -40,7 +40,8 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
         dialogMsg: '',
         dialogCategory: { name: '', subcategories: [] },
         newSubcategory: '',
-        focus: true
+        focus: true,
+        isSaving: false
     })
     const [errors, setErrors] = useState({})    
 
@@ -66,7 +67,7 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
     const handleAddSubcategory = () => {
         if (!state.newSubcategory) {
             return
-        }
+        }    
 
         const subcat = {
             id: uuidv4(),
@@ -88,7 +89,7 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
         updateState({
             dialogMsg: '',
             dialogCategory: tempCategory,
-            newSubcategory: ''
+            newSubcategory: ''            
         })
     }
 
@@ -131,6 +132,7 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
     // Save the updated category and close the dialog 
     const handleSave = () => {
         if (validateAllFields()) {
+            updateState({isSaving: true})
             CategoryService.updateCategory(state.dialogCategory).then(() => {               
                 onClose(true)
             }).catch((error) => {
@@ -141,6 +143,8 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
                     console.error('Error creating category:', error)
                     updateState({ dialogMsg: 'Error creating the Category' })
                 }
+            }).finally(() => {
+                updateState({isSaving: false})
             })
         }
     }
