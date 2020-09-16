@@ -48,7 +48,8 @@ class SnackMsg extends React.PureComponent {
         const { classes } = this.props
 
         return (
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={this.state.open} key={this.state.msg}
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} 
+                open={this.state.open} key={this.state.msg}
                 autoHideDuration={2000} onClose={this.handleClose}>
                 <SnackbarContent message={this.state.msg} className={this.state.error ? classes.snackbarError : classes.snackbar}
                     action={[

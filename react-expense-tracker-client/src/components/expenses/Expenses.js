@@ -20,7 +20,8 @@ export default React.memo(function Expenses() {
         selectCategories: [],
         categoryMap: {},
         dialogOpen: false,
-        dialogExpense: null
+        dialogExpense: null,
+        refreshExpenses: false
     })
     const [filter, setFilter] = useState({
         categoryIds: [],
@@ -29,46 +30,46 @@ export default React.memo(function Expenses() {
         endDate: moment().endOf('day').format('YYYY-MM-DD'),
         endDateMs: moment().endOf('day').valueOf()
     })
-
+    
     // Update state
-    const updateState = (newState) => {        
-        setState(state => ({ ...state, ...newState }))        
+    const updateState = (newState) => {
+        setState(state => ({ ...state, ...newState }))
     }
 
     // Update the filter state
-    const updateFilter = (newFilter) => {        
-        setFilter(filter => ({ ...filter, ...newFilter }))       
+    const updateFilter = (newFilter) => {
+        setFilter(filter => ({ ...filter, ...newFilter }))
     }
 
-    // Retrieve the categories for the select
-    const getCategorySelect = useCallback(() => {
-        return CategoryService.getCategorySelect().then((selectCategories) => {
-            const categoryMap = selectCategories.reduce((map, cat) => {
-                map[cat.value] = cat.label
-                return map
-            }, {})
-            updateState({ selectCategories: selectCategories, categoryMap: categoryMap })
-        }).catch((error) => {
-            console.error('Error retrieving select categories:', error)
-            snackRef.current.show(true, 'Error retrieving category select data')
-        })
-    }, [])
-
-    // Retrieve the expenses whenever the filter changes
-    const getExpenses = useCallback(() => {
-        return ExpenseService.getExpenses(filter, state.categoryMap).then((expenses) => {
-            updateState({ expenses: expenses })
-        }).catch((error) => {
-            console.error('Error retrieving expenses:', error)
-            snackRef.current.show(true, 'Error retrieving expenses')
-        })
+    // Retrieve category select data on mount and whenever the user changes the filter
+    useEffect(() => {        
+        const getCategorySelect = () => {
+            return CategoryService.getCategorySelect().then((selectCategories) => {
+                const categoryMap = selectCategories.reduce((map, cat) => {
+                    map[cat.value] = cat.label
+                    return map
+                }, {})
+                updateState({ selectCategories: selectCategories, categoryMap: categoryMap })
+            }).catch((error) => {
+                console.error('Error retrieving select categories:', error)
+                snackRef.current.show(true, 'Error retrieving category select data')
+            })
+        }
+        getCategorySelect()
     }, [filter])
 
-    // Retrieve category and expense data on mount and whenever the user changes the filter criteria
-    useEffect(() => {        
-        getCategorySelect()        
-        getExpenses()
-    }, [filter, getCategorySelect, getExpenses])
+    // Retrieve the expense data on mount and whenever the user changes the filter criteria
+    useEffect(() => {       
+        const getExpenses = () => {
+            return ExpenseService.getExpenses(filter, state.categoryMap).then((expenses) => {
+                updateState({ expenses: expenses, refreshExpenses: false })
+            }).catch((error) => {
+                console.error('Error retrieving expenses:', error)
+                snackRef.current.show(true, 'Error retrieving expenses')
+            })
+        }        
+        getExpenses()        
+    }, [filter, state.refreshExpenses, state.categoryMap])
 
     // Open the create expense dialog
     const handleOpenDialog = () => {
@@ -77,12 +78,11 @@ export default React.memo(function Expenses() {
 
     // Close the create expense dialog
     const handleCloseDialog = useCallback((refresh) => {
-        updateState({ dialogOpen: false })
+        updateState({ dialogOpen: false, refreshExpenses: true })
         if (refresh) {
-            snackRef.current.show(false, 'Expense added successfully')
-            getExpenses()
+            snackRef.current.show(false, 'Expense added successfully')            
         }
-    }, [getExpenses])
+    }, [])
 
     // Update filter state when a date changes
     const handleDateChange = useCallback((startDate, startDateMs, endDate, endDateMs) => {
@@ -101,21 +101,20 @@ export default React.memo(function Expenses() {
 
     // Close the expense dialog after an expense is updated, and retrieve the expenses list again
     const handleUpdate = useCallback(() => {
-        updateState({ dialogOpen: false })
-        snackRef.current.show(false, 'Expense updated successfully')
-        getExpenses()
-    }, [getExpenses])
+        updateState({ dialogOpen: false, refreshExpenses: true })        
+        snackRef.current.show(false, 'Expense updated successfully')        
+    }, [])
 
     // Delete an expense
     const handleDelete = useCallback((expense) => {
         ExpenseService.deleteExpense(expense._id).then(() => {
-            getExpenses()
+            updateState({ refreshExpenses: true })
             snackRef.current.show(false, 'Expense deleted successfully')
         }).catch((error) => {
             console.error('Error deleting expense:', error)
             snackRef.current.show(true, 'Error deleting the expense')
         })
-    }, [getExpenses])
+    }, [])
 
     // Render function for the filter inputs
     const renderFilterInputs = () => {
@@ -138,7 +137,7 @@ export default React.memo(function Expenses() {
             </div>
         )
     }
-  
+
     return (
         <div>
             <PageHeader pageTitle="Manage Expenses" />

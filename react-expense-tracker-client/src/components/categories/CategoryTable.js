@@ -5,6 +5,7 @@ import { Grid, Table, TableTreeColumn, TableSelection } from '@devexpress/dx-rea
 import { IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon, Add as AddIcon } from '@material-ui/icons'
 import ActionCell from '../common/ActionCell'
+import * as CategoryActions from './actions/categoryActions'
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -33,14 +34,14 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
     // changes, reset the selected category and subcategory to the current data.
     useEffect(() => {
         if (state.categories.length && !state.selectedCategory && !state.selectedSubcategory) {
-            dispatch({type: 'initial-select-category', payload: { category: state.categories[0]}})           
+            dispatch(CategoryActions.initialSelectCategory(state.categories[0]))           
         } else {
             // Reset the selected category and subcategory so that the reference matches the categories list
             if (state.selectedCategory) {
-                dispatch({type: 'reset-selected-category'})                               
+                dispatch(CategoryActions.resetSelectedCategory())                               
             }
             if (state.selectedSubcategory) {
-                dispatch({type: 'reset-selected-subcategory'})                
+                dispatch(CategoryActions.resetSelectedSubcategory())                
             }
         }
     }, [dispatch, state.categories, state.selectedCategory, state.selectedSubcategory])
@@ -65,9 +66,9 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
 
         if (selectedItem) {
             if (isSubcategory(selectedItem)) {
-                dispatch({type: 'select-subcategory', payload: {subcategory: selectedItem}})                
+                dispatch(CategoryActions.selectSubcategory(selectedItem))                
             } else {
-                dispatch({type: 'select-category', payload: {category: selectedItem}})                
+                dispatch(CategoryActions.selectCategory(selectedItem))                
             }
         }
     }
@@ -77,7 +78,7 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
     const handleExpandedRowsChange = (expandedRowIds) => {
         if (state.selectedSubcategory) {
             if (!expandedRowIds.includes(state.selectedSubcategory.parentCategoryId)) {
-                dispatch({type: 'collapse-category-with-selected-subcategory'})                
+                dispatch(CategoryActions.collapseCategoryWithSelectedSubcategory())                
             }
         }
         setExpandedRowIds(expandedRowIds)
@@ -85,17 +86,17 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
 
     // Show the add subcategory dialog
     const showAddSubcategoryDialog = () => {
-        dispatch({type: 'show-add-subcategory-dialog'})        
+        dispatch(CategoryActions.showAddSubcategoryDialog())        
     }
 
     // Set the expanded row ids
     const setExpandedRowIds = (expandedRowIds) => {
-        dispatch({type: 'expand-rows', payload: { expandedRowIds: expandedRowIds }})        
+        dispatch(CategoryActions.expandCategoryRows(expandedRowIds))        
     }
 
     // Open the Confirm Delete dialog
     const confirmDelete = () => {
-        dispatch({type: 'confirm-delete'})       
+        dispatch(CategoryActions.confirmDelete())       
     }
 
     // Cell component with custom Actions cell
@@ -142,6 +143,4 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
             <TableTreeColumn for="name" />
         </Grid>
     )
-}, (prevProps, nextProps) => {
-    return prevProps.state === nextProps.state
 })

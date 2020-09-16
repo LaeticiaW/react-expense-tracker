@@ -16,7 +16,8 @@ export default React.memo(function Imports() {
 
     const [state, setState] = useState({
         imports: [],
-        dialogOpen: false      
+        dialogOpen: false,
+        refreshImports: false     
     })
     const [filter, setFilter] = useState({
         startDate: moment().startOf('year').format('YYYY-MM-DD'),
@@ -34,27 +35,25 @@ export default React.memo(function Imports() {
     const updateFilter = (newFilter) => {
         setFilter(filter => ({ ...filter, ...newFilter }))
     }
-    
-    // Retrieve the import summary list  
-    const getImports = useCallback(() => {        
-        ImportService.getImports(filter).then((imports) => {
-            updateState({ imports: imports })
-        }).catch((error) => {
-            console.error('Error retrieving imports:', error)
-            snackRef.current.show(true, 'Error retrieving imports')            
-        })
-    }, [filter, updateState])
-
-    // Retrieve the imports list whenever the filter changes
+   
+    // Retrieve the imports list on mount and whenever the filter changes
     useEffect(() => {
+        const getImports = () => {        
+            ImportService.getImports(filter).then((imports) => {
+                updateState({ imports: imports, refreshImports: false })
+            }).catch((error) => {
+                console.error('Error retrieving imports:', error)
+                snackRef.current.show(true, 'Error retrieving imports')            
+            })
+        }
         getImports()
-    }, [filter, getImports])   
+    }, [filter, state.refreshImports, updateState])   
     
     // Delete the import summary and all associated expenses  
     const handleDelete = (importItem) => {
         ExpenseService.deleteExpensesByImportId(importItem._id).then(() => {
             snackRef.current.show(false, 'Imported expenses deleted successfully')
-            getImports()
+            updateState({ refreshImports: true })
         }).catch((error) => {
             console.error('Error deleting imported expenses:', error)
             snackRef.current.show(true, 'Error deleting imported expense')
@@ -68,11 +67,10 @@ export default React.memo(function Imports() {
 
     // Close the import dialog
     const handleCloseDialog = (refresh) => {
+        updateState({ dialogOpen: false, refreshImports: true })
         if (refresh) {
-            snackRef.current.show(false, 'Expenses imported successfully')
-            getImports()
-        }
-        updateState({ dialogOpen: false })
+            snackRef.current.show(false, 'Expenses imported successfully')           
+        }        
     }
 
     // Save filter state when the filter dates change

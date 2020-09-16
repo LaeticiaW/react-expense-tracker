@@ -8,7 +8,8 @@ import CategoryDetails from './CategoryDetails'
 import SubcategoryDetails from './SubcategoryDetails'
 import CategoryTable from './CategoryTable'
 import CategoryToolbar from './CategoryToolbar'
-import CategoryReducer from './CategoryReducer'
+import CategoryReducer from './actions/categoryReducer'
+import * as CategoryActions from './actions/categoryActions'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -48,19 +49,15 @@ export default React.memo(function Categories() {
     // Retrieve the category data
     const getCategories = useCallback(() => {             
         CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => { 
-            dispatch({type: 'set-category-data', payload: {
-                categories: categories,
-                categoryMap: categoryMap,
-                subcategoryMap: subcategoryMap
-            }})                          
+            dispatch(CategoryActions.setCategoryData(categories, categoryMap, subcategoryMap))             
         }).catch((error) => {
             console.error('Error retreiving categories:', error)
-            snackRef.current.show(true, 'Error retrieving categories')
+            snackRef.current.show(true, 'Error retrieving categories')                  
         })
     }, [])
 
     // Retrieve the categories when component first mounted
-    useEffect(() => {
+    useEffect(() => {        
         getCategories()
     }, [getCategories])
         

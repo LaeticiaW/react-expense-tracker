@@ -7,6 +7,7 @@ import AddSubcategoryDialog from './AddSubcategoryDialog'
 import CategoryService from '../../services/category'
 import SnackMsg from '../common/SnackMsg'
 import ConfirmDialog from '../common/ConfirmDialog'
+import * as CategoryActions from './actions/categoryActions'
 
 const useStyles = makeStyles(theme => ({
     toolbar: {
@@ -45,14 +46,14 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
     // Show the add subcategory dialog
     const showAddSubcategoryDialog = () => {
         handleCloseMenu()        
-        dispatch({ type: 'show-add-subcategory-dialog'})
+        dispatch(CategoryActions.showAddSubcategoryDialog())
     }
 
     // Close the add category dialog, select this category in the table, and retrieve the category list again
     const handleCloseAddCategoryDialog = (newCategory) => {
         setOpenAddCategoryDialog(false)
         if (newCategory) { 
-            dispatch({type: 'add-category', payload: { category: newCategory }})           
+            dispatch(CategoryActions.addCategory(newCategory))           
             getCategories()
             snackRef.current.show(false, 'Category added successfully')
         }
@@ -60,11 +61,11 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
 
     // Close the add subcategory dialog and retrieve the category list again
     const handleCloseAddSubcategoryDialog = (newSubcategory) => {
-        dispatch({type: 'close-add-subcategory-dialog'})       
+        dispatch(CategoryActions.closeAddSubcategoryDialog())       
         if (newSubcategory) {
             getCategories()
             if (!isExpanded(newSubcategory.parentCategoryId)) {
-                dispatch({type: 'reset-expanded-rows', payload: { categoryId: newSubcategory.parentCategoryId }})                
+                dispatch(CategoryActions.resetExpandedCategoryRows(newSubcategory.parentCategoryId))                
             }
             snackRef.current.show(false, 'Subcategory added successfully')
         }
@@ -78,24 +79,24 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
     // Expand all categories in the tree
     const handleExpandAll = () => {
         handleCloseMenu()
-        dispatch({type: 'expand-all'})        
+        dispatch(CategoryActions.expandAllCategories())        
     }
 
     // Collapse all categories in the tree
     const handleCollapseAll = () => {
         handleCloseMenu()
-        dispatch({type: 'collapse-all'})        
+        dispatch(CategoryActions.collapseAllCategories())        
     }
 
     // Open the confirm delete dialog
     const confirmDelete = () => {
         handleCloseMenu()
-        dispatch({type: 'confirm-delete'})        
+        dispatch(CategoryActions.confirmDelete())        
     }
 
     // Cancel the confirm delete dialog
     const handleCancelConfirm = () => {
-        dispatch({type: 'cancel-confirm-delete'})        
+        dispatch(CategoryActions.cancelConfirmDelete())        
     }
     
     // Delete the selected Category or Subcategory   
@@ -111,7 +112,7 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
     // Delete the selected Category   
     const deleteCategory = () => {
         CategoryService.deleteCategory(state.selectedCategory._id).then(() => {
-            dispatch({type: 'delete-category'})            
+            dispatch(CategoryActions.deleteCategory())            
             getCategories()
             snackRef.current.show(false, 'Category deleted successfully')
         }).catch((error) => {
@@ -137,7 +138,7 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
 
             // Save the category to the db
             CategoryService.updateCategory(category).then((cat) => {  
-                dispatch({type: 'delete-subcategory', payload: { category: cat }})                           
+                dispatch(CategoryActions.deleteSubcategory(cat))                           
                 getCategories()
                 snackRef.current.show(false, "Subcategory deleted successfully")
             }).catch((error) => {

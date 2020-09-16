@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PageHeader from '../common/PageHeader'
 import TableFilter from '../common/TableFilter'
 import ExpenseSummaryTable from './ExpenseSummaryTable'
@@ -37,45 +37,42 @@ export default React.memo(function ExpenseSummary() {
         setFilter(filter => ({ ...filter, ...newFilter }))
     }
 
-    // Retrieve the summarized expense data      
-    const getExpenseTotals = useCallback(() => {
-        ExpenseService.getExpenseTotals(filter).then((expenseTotals) => {                        
-            updateState({
-                expenseTotals: expenseTotals,
-                totalExpensesAmount: expenseTotals.reduce((sum, cat) => sum + Number(cat.totalAmount), 0),
-                expandedRowIds: []
+    // Retrieve category select data on mount and whenever the user changes the filter
+    useEffect(() => {
+        const getCategorySelect = () => {
+            CategoryService.getCategorySelect().then((selectCategories) => {
+                const categoryMap = selectCategories.reduce((map, cat) => {
+                    map[cat.value] = cat.label
+                    return map
+                }, {})
+                updateState({
+                    selectCategories: selectCategories,
+                    categoryMap: categoryMap
+                })
+            }).catch((error) => {
+                console.error('Error retrieving category select:', error)
+                snackRef.current.show(true, 'Error retrieving category select data')
             })
-        }).catch((error) => {
-            console.error('Error retrieving expense totals:', error)
-            snackRef.current.show(true, 'Error retrieving expense summary data')
-        })
+        }        
+        getCategorySelect()
     }, [filter])
 
-    // Get the categories for the select drop down    
-    const getCategorySelect = useCallback(() => {
-        CategoryService.getCategorySelect().then((selectCategories) => {
-            const categoryMap = selectCategories.reduce((map, cat) => {
-                map[cat.value] = cat.label
-                return map
-            }, {})
-            updateState({
-                selectCategories: selectCategories,
-                categoryMap: categoryMap
-            })
-        }).catch((error) => {
-            console.error('Error retrieving category select:', error)
-            snackRef.current.show(true, 'Error retrieving category select data')
-        })
-    }, [])
-
-    // Retrieve category and expense data on mount and whenever the user changes the filter criteria
+    // Retrieve the expense totals data on mount and whenever the user changes the filter
     useEffect(() => {
-        // Retrieve the select categories
-        getCategorySelect()
-
-        // Retrieve the expenses
+        const getExpenseTotals = () => {
+            ExpenseService.getExpenseTotals(filter).then((expenseTotals) => {                        
+                updateState({
+                    expenseTotals: expenseTotals,
+                    totalExpensesAmount: expenseTotals.reduce((sum, cat) => sum + Number(cat.totalAmount), 0),
+                    expandedRowIds: []
+                })
+            }).catch((error) => {
+                console.error('Error retrieving expense totals:', error)
+                snackRef.current.show(true, 'Error retrieving expense summary data')
+            })
+        }
         getExpenseTotals()
-    }, [filter, getCategorySelect, getExpenseTotals])
+    }, [filter])
 
     // Update filter state when a filter date changes
     const handleDateChange = (startDate, startDateMs, endDate, endDateMs) => {
