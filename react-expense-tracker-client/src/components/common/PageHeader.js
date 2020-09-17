@@ -16,6 +16,4 @@ export default React.memo(function PageHeader({pageTitle}) {
     return (
         <h2 className={classes.pageTitle}>{pageTitle}</h2>
     )
-}, (prevProps, nextProps) => {
-    return prevProps.pageTitle === nextProps.pageTitle
 })

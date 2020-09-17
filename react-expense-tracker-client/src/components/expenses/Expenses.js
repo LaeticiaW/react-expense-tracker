@@ -14,7 +14,7 @@ import moment from 'moment'
 
 export default React.memo(function Expenses() {
     const snackRef = useRef(null)
-
+    
     const [state, setState] = useState({
         expenses: [],
         selectCategories: [],
@@ -56,7 +56,7 @@ export default React.memo(function Expenses() {
             })
         }
         getCategorySelect()
-    }, [filter])
+    }, [filter, state.refreshExpenses])
 
     // Retrieve the expense data on mount and whenever the user changes the filter criteria
     useEffect(() => {       
@@ -69,7 +69,7 @@ export default React.memo(function Expenses() {
             })
         }        
         getExpenses()        
-    }, [filter, state.refreshExpenses, state.categoryMap])
+    }, [filter, state.refreshExpenses])
 
     // Open the create expense dialog
     const handleOpenDialog = () => {
@@ -77,8 +77,8 @@ export default React.memo(function Expenses() {
     }
 
     // Close the create expense dialog
-    const handleCloseDialog = useCallback((refresh) => {
-        updateState({ dialogOpen: false, refreshExpenses: true })
+    const handleCloseDialog = useCallback((refresh) => {        
+        updateState({ dialogOpen: false, refreshExpenses: refresh })
         if (refresh) {
             snackRef.current.show(false, 'Expense added successfully')            
         }

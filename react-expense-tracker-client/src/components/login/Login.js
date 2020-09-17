@@ -5,7 +5,6 @@ import { UserStoreContext } from '../../stores/UserStore'
 import UserService from '../../services/user'
 import FormSelect from '../common/form/FormSelect'
 import { makeStyles } from '@material-ui/core/styles'
-import useRouter from '../../customHooks/useRouter'
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -18,11 +17,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles()
     const userStore = useContext(UserStoreContext)
-    const router = useRouter()
-
+    
     const [userId, setUserId] = useState('')
     const [users, setUsers] = useState([])
     const [errors, setErrors] = useState({})
@@ -57,8 +55,8 @@ export default function Login() {
     // Login the user
     const handleLogin = () => {
         if (validateField('userId', userId)) {            
-            userStore.login(userId).then(() => {  
-                router.push('/dashboard')                           
+            userStore.login(userId).then(() => {                  
+                props.history.push('/dashboard')                         
             })
         }       
     }

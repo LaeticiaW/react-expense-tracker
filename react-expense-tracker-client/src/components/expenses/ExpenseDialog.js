@@ -63,17 +63,16 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
     // Initialize state whenever the dialog opens
     const handleOpen = () => {       
         let isCreate = dialogExpense === null
+               
+        let initialExpense = isCreate ? getDefaultExpense() : dialogExpense       
        
-        const initialExpense = isCreate ? getDefaultExpense() : dialogExpense
-       
-        initialExpense.categoryId = initialExpense.categoryId || ''
-        initialExpense.subcategoryId = initialExpense.subcategoryId || ''
-
-        // Initialize variables                
+        // Initialize variables, temporarily set categoryId/subcategoryId to empty string until the
+        // select values are retrieved (to prevent material-ui select warnings)                
         updateState({
             isCreate: isCreate, formSaved: false, dialogMsg: '', categoryMap: {}, categories: [],
-            subcategories: [], expense: { ...initialExpense }
+            subcategories: [], expense: { ...initialExpense, categoryId: '', subcategoryId: '' }
         })
+       
         setErrors(defaultErrors)
         setDialogMsg('')
 
@@ -90,13 +89,15 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
             }, {})
             const newState = {
                 categories: categories,
-                categoryMap: catMap
+                categoryMap: catMap                
             }
 
             // For update mode get the subcategory select list for the specified category
             if (!state.isCreate && initialExpense.categoryId) {
                 const category = catMap[initialExpense.categoryId]
-                newState.subcategories = category.subcategories
+                // Reset the expense to populate the categoryId/subcategoryId
+                newState.expense = initialExpense
+                newState.subcategories = category.subcategories                
             }
 
             updateState(newState)
