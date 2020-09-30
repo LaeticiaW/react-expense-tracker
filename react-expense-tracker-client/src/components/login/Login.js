@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch } from "react-redux"
+import * as Actions from '../../stores/redux/actions/actions'
+// Mobx: import { useContext } from 'react'
+// Mobx: import { UserStoreContext } from '../../stores/mobx/UserStore'
 import { Button } from '@material-ui/core'
 import PageHeader from '../common/PageHeader'
-import { UserStoreContext } from '../../stores/UserStore'
 import UserService from '../../services/user'
 import FormSelect from '../common/form/FormSelect'
 import { makeStyles } from '@material-ui/core/styles'
@@ -19,12 +22,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login(props) {
     const classes = useStyles()
-    const userStore = useContext(UserStoreContext)
-    
+    // Mobx: const userStore = useContext(UserStoreContext)    
+    const dispatch = useDispatch()
+
     const [userId, setUserId] = useState('')
     const [users, setUsers] = useState([])
     const [errors, setErrors] = useState({})
-    
+
     // Retrieve the list of users
     const getUsers = useCallback(() => {
         UserService.getUsers().then(users => {
@@ -54,11 +58,19 @@ export default function Login(props) {
 
     // Login the user
     const handleLogin = () => {
-        if (validateField('userId', userId)) {            
-            userStore.login(userId).then(() => {                  
-                props.history.push('/dashboard')                         
-            })
-        }       
+        if (validateField('userId', userId)) {
+            // Mobx:          
+            // userStore.login(userId).then(() => {                  
+            //     props.history.push('/dashboard')                         
+            // })
+
+            // UserService.getUser(userId).then(user => {
+            //     dispatch(Actions.login(user))
+            //     props.history.push('/dashboard')
+            // })
+            dispatch(Actions.loginAsync(userId))
+            props.history.push('/dashboard')
+        }
     }
 
     return (
@@ -76,7 +88,7 @@ export default function Login(props) {
                     </Button>
                 </form>
             </div>
-                          
+
         </div>
     )
 }

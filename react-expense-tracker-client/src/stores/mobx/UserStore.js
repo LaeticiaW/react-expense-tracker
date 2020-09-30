@@ -1,6 +1,6 @@
 import { observable, action, decorate, computed } from 'mobx'
 import { createContext } from 'react'
-import UserService from '../services/user'
+import UserService from '../../services/user'
 
 class UserStore {
     // Store data
@@ -10,7 +10,7 @@ class UserStore {
         lastName: ''
     }
     loggedInUserId = localStorage.getItem('etLoginToken')
-    isUserRetrieved = false
+    isUserInitialized = false
 
     // On app startup, this will retrieve the user data
     getCurrentUser() {        
@@ -18,12 +18,12 @@ class UserStore {
         if (userId) {
             UserService.getUser(userId).then(user => {                             
                 this.currentUser = user
-                this.isUserRetrieved = true
+                this.isUserInitialized = true
             }).catch(error => {  
-                this.isUserRetrieved = true                            
+                this.isUserInitialized = true                            
             })
         } else {         
-            this.isUserRetrieved = true   
+            this.isUserInitialized = true 
         }                
     }
 
@@ -57,11 +57,11 @@ class UserStore {
 decorate(UserStore, {
     currentUser: observable,
     loggedInUserId: observable,  
-    isUserRetrieved: observable,
+    isUserInitialized: observable,
     getCurrentUser: action, 
     login: action,
     logout: action,
-    setIsUserRetrieved: action,
+    setIsUserInitialized: action,
     userLetter: computed,
     userName: computed
 })

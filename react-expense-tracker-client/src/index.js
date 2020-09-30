@@ -1,15 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import './wdyr'
+import { Provider } from 'react-redux'
+import globalStore from './stores/redux/store'
 import './index.css'
 import { App } from './App'
 import * as serviceWorker from './serviceWorker'
 import 'mobx-react-lite/batchingForReactDom'
-
 import 'fontsource-roboto'
 
-ReactDOM.render(  
-    <App />,  
+ReactDOM.render(
+  <Provider store={globalStore}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 )
 

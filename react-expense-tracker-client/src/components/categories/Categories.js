@@ -51,7 +51,7 @@ export default React.memo(function Categories() {
         CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => { 
             dispatch(CategoryActions.setCategoryData(categories, categoryMap, subcategoryMap))             
         }).catch((error) => {
-            console.error('Error retreiving categories:', error)
+            console.error('Error retrieving categories:', error)
             snackRef.current.show(true, 'Error retrieving categories')                  
         })
     }, [])

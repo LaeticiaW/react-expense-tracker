@@ -23,5 +23,38 @@ export default {
                 console.error('UserService.getUser error:', error.response ? error.response : error)
                 return Promise.reject(error.response)
             })
+    },
+
+    /*
+     * Get the logged in userId from local storage and then retrieve the user object     
+     */
+    getCurrentUser() {        
+        let userId = localStorage.getItem('etLoginToken')
+        if (userId) {
+            this.getUser(userId).then(user => {                             
+                return user
+            }).catch(error => {  
+                return {}                              
+            })
+        } else {
+            return {}
+        }            
+    },
+
+    /*
+     * Login the user
+     */
+    login(userId) {        
+        return this.getUser(userId).then(user => {           
+            localStorage.setItem('etLoginToken', user.id)                   
+        })
+    },
+
+    /*
+     * Logout the user
+     */
+    logout() {
+        localStorage.removeItem('etLoginToken')       
     }
+
 }

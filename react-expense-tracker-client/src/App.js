@@ -1,5 +1,9 @@
-import React, { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch, shallowEqual } from "react-redux"
+import * as Actions from './stores/redux/actions/actions'
+// Mobx: import { useContext } from 'react'
+// Mobx: import { observer } from 'mobx-react-lite'
+// Mobx: import { UserStoreContext } from './stores/mobx/UserStore'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppHeader from './components/appBar/AppHeader'
 import { Router, Route, Redirect } from "react-router-dom"
@@ -9,7 +13,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
-import { UserStoreContext } from './stores/UserStore'
+import UserService from './services/user'
 import { makeStyles } from '@material-ui/core/styles'
 
 const history = createBrowserHistory();
@@ -93,13 +97,25 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export const App = observer(() => {
+// Mobx: export const App = observer(() => {
+export const App = () => {
     const classes = useStyles()
-    const userStore = useContext(UserStoreContext)
+    // Mobx: const userStore = useContext(UserStoreContext)
+    const userStore = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        userStore.getCurrentUser()
-    }, [userStore])
+        const userId = localStorage.getItem('etLoginToken')
+        dispatch(Actions.getCurrentUserAsync(userId))       
+        // UserService.getUser(userId).then(user => {
+        //     dispatch(Actions.getCurrentUser(user))
+        // })
+    }, [dispatch])
+
+    // For Mobx:
+    // useEffect(() => {
+    //     userStore.getCurrentUser()
+    // }, [userStore])
 
     // Create the application route elements.  
     const routes = () => {
@@ -118,7 +134,7 @@ export const App = observer(() => {
 
         return navRoutes
     }
-   
+
     return (
         <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -127,7 +143,7 @@ export const App = observer(() => {
                         <CssBaseline />
                         <AppHeader />
                         {/* If user is not logged in, then redirect to Login page */}
-                        {userStore.isUserRetrieved &&
+                        {userStore.isUserInitialized &&
                             <main className={classes.appContent}>
                                 {routes()}
                                 {!userStore.loggedInUserId && <Redirect to="/login" />}
@@ -138,4 +154,4 @@ export const App = observer(() => {
             </MuiPickersUtilsProvider>
         </ThemeProvider>
     )
-})
+}
