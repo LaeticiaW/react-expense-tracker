@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import globalStore from './stores/redux/store'
+import globalStore from './store/store'
 import './index.css'
 import { App } from './App'
 import * as serviceWorker from './serviceWorker'
-import 'mobx-react-lite/batchingForReactDom'
 import 'fontsource-roboto'
 
 ReactDOM.render(

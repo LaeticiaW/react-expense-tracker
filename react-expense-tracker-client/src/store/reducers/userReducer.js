@@ -45,7 +45,6 @@ export default function(state = {}, action) {
                 currentUser: null,
                 userName: '',
                 userLetter:  '',
-                loggedInUserId: '',
                 loginError: null ,
                 loggedInUserId: null            
             }

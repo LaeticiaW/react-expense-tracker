@@ -1,5 +1,5 @@
 import * as ActionTypes from './actionTypes'
-import UserService from '../../../services/user'
+import UserService from '../../services/user'
 
 export function getCurrentUser(user) {    
     return {

@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
-// Mobx: import { useContext } from 'react'
-// Mobx: import { UserStoreContext } from '../../stores/mobx/UserStore'
 import { makeStyles } from '@material-ui/core/styles'
 import { Drawer, List, ListItem, ListItemText, ListItemIcon, IconButton } from '@material-ui/core'
 import { Menu as MenuIcon } from '@material-ui/icons'
@@ -36,9 +34,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function NavDrawer() {
-    const classes = useStyles()
-    // Mobx: const userStore = useContext(UserStoreContext)
-    const userStore = useSelector(state => state.user, shallowEqual)
+    const classes = useStyles()   
+    const userState = useSelector(state => state.user, shallowEqual)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -70,7 +67,7 @@ export default function NavDrawer() {
 
     return (
         <div className="nav-drawer">
-            {userStore.loggedInUserId &&
+            {userState.loggedInUserId &&
                 <>
                     <IconButton onClick={toggleDrawer} className={classes.menuButton}><MenuIcon /></IconButton>
                     <Drawer open={drawerOpen} classes={{ paper: classes.drawerPaper }} BackdropProps={{ invisible: true }}>

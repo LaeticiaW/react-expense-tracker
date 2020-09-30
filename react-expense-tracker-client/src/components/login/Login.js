@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch } from "react-redux"
-import * as Actions from '../../stores/redux/actions/actions'
-// Mobx: import { useContext } from 'react'
-// Mobx: import { UserStoreContext } from '../../stores/mobx/UserStore'
+import * as Actions from '../../store/actions/actions'
 import { Button } from '@material-ui/core'
 import PageHeader from '../common/PageHeader'
 import UserService from '../../services/user'
@@ -21,8 +19,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function Login(props) {
-    const classes = useStyles()
-    // Mobx: const userStore = useContext(UserStoreContext)    
+    const classes = useStyles()    
     const dispatch = useDispatch()
 
     const [userId, setUserId] = useState('')
@@ -58,16 +55,7 @@ export default function Login(props) {
 
     // Login the user
     const handleLogin = () => {
-        if (validateField('userId', userId)) {
-            // Mobx:          
-            // userStore.login(userId).then(() => {                  
-            //     props.history.push('/dashboard')                         
-            // })
-
-            // UserService.getUser(userId).then(user => {
-            //     dispatch(Actions.login(user))
-            //     props.history.push('/dashboard')
-            // })
+        if (validateField('userId', userId)) {           
             dispatch(Actions.loginAsync(userId))
             props.history.push('/dashboard')
         }

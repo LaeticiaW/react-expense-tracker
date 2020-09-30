@@ -1,8 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch, shallowEqual } from "react-redux"
-import * as Actions from '../../stores/redux/actions/actions'
-// Mobx: import { useContext } from 'react'
-// Mobx: import { UserStoreContext } from '../../stores/mobx/UserStore'
+import * as Actions from '../../store/actions/actions'
 import { AppBar, Toolbar, Avatar, Menu, MenuItem } from '@material-ui/core'
 import NavDrawer from './NavDrawer'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,14 +18,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function AppHeader() {
-    const classes = useStyles()
-    // Mobx: const userStore = useContext(UserStoreContext)
-    const userStore = useSelector(state => state.user, shallowEqual)
+    const classes = useStyles()    
+    const userState = useSelector(state => state.user, shallowEqual)
     const dispatch = useDispatch()
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null)
-
-    const counter = useSelector(state => state.counter)
-
+    
     // Open the avatar menu
     const handleOpenMenu = (event) => {
         setMenuAnchorEl(event.currentTarget)
@@ -40,8 +35,7 @@ export default function AppHeader() {
 
     // Logout the user
     const handleLogout = () => {
-        handleCloseMenu()
-        // Mobx: userStore.logout()              
+        handleCloseMenu()              
         dispatch(Actions.logout())
     }
 
@@ -51,10 +45,10 @@ export default function AppHeader() {
                 <Toolbar>
                     <NavDrawer />
                     <h3 className={classes.appTitle}>Expense Tracker</h3>                  
-                    {userStore.loggedInUserId &&
+                    {userState.loggedInUserId &&
                         <>
-                            <Avatar className={classes.avatar} onClick={handleOpenMenu} title={userStore.userName}>
-                                {userStore.userLetter}
+                            <Avatar className={classes.avatar} onClick={handleOpenMenu} title={userState.userName}>
+                                {userState.userLetter}
                             </Avatar>
                             <Menu id="menu" anchorEl={menuAnchorEl} keepMounted
                                 open={Boolean(menuAnchorEl)} onClose={handleCloseMenu}
