@@ -1,11 +1,11 @@
 import * as ActionTypes from '../actions/actionTypes'
 
 function getUserLetter(user) {
-    return user && user.id ? user.id.substr(0, 1).toUpperCase() : '' 
+    return user && user.id ? user.firstName.substr(0, 1).toUpperCase() : '' 
 }
 
 function getUserName(user) {
-    return user && user.id ? user.firstName + user.lastName : '' 
+    return user && user.id ? user.firstName + ' ' + user.lastName : '' 
 }
 
 export default function(state = {}, action) {    
@@ -17,7 +17,7 @@ export default function(state = {}, action) {
                 userName: getUserName(action.payload.currentUser),
                 userLetter:  getUserLetter(action.payload.currentUser),
                 isUserInitialized: true,
-                userError: null                
+                error: null                
             }
         case ActionTypes.GET_CURRENT_USER_ERROR:                          
             return { 
@@ -26,7 +26,7 @@ export default function(state = {}, action) {
                 userName: '',
                 userLetter:  '',
                 isUserInitialized: true,
-                userError: action.payload.error
+                error: action.payload.error
             }    
         case ActionTypes.LOGIN:           
             localStorage.setItem('etLoginToken', action.payload.currentUser.id)            
@@ -36,17 +36,17 @@ export default function(state = {}, action) {
                 userName: getUserName(action.payload.currentUser),
                 userLetter:  getUserLetter(action.payload.currentUser),
                 loggedInUserId: action.payload.currentUser.id,
-                loginError: null             
+                error: null             
             }
         case ActionTypes.LOGIN_ERROR:           
-            localStorage.setItem('etLoginToken', action.payload.currentUser.id)            
+            localStorage.removeItem('etLoginToken')            
             return { 
                 ...state, 
                 currentUser: null,
                 userName: '',
-                userLetter:  '',
-                loginError: null ,
-                loggedInUserId: null            
+                userLetter:  '',                
+                loggedInUserId: null,
+                error: action.payload.error            
             }
         case ActionTypes.LOGOUT:
             localStorage.removeItem('etLoginToken')  
@@ -55,7 +55,8 @@ export default function(state = {}, action) {
                 currentUser: null, 
                 userName: '',
                 userLetter:  '',
-                loggedInUserId: null                
+                loggedInUserId: null,
+                error: null               
             }    
         default:
             return state

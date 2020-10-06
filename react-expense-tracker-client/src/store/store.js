@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 
-const initialState = {
+export const initialState = {
     user: {
       currentUser: {
         id: '',
@@ -12,7 +12,8 @@ const initialState = {
       userName: '',
       userLetter: '',
       loggedInUserId: localStorage.getItem('etLoginToken'),
-      isUserInitialized: false   
+      isUserInitialized: false,
+      error: null  
     }
   }
   
