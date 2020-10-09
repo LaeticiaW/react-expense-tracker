@@ -12,7 +12,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
 import { makeStyles } from '@material-ui/core/styles'
 
-const history = createBrowserHistory();
+const history = createBrowserHistory()
 
 const theme = createMuiTheme({
     palette: {

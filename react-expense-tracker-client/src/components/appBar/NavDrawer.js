@@ -57,7 +57,7 @@ export default function NavDrawer() {
         })
 
         return (
-            <nav className="nav-drawer-list">
+            <nav className="nav-drawer-list"  data-testid="side-nav-menu">
                 <List>
                     {routeList}
                 </List>
@@ -69,7 +69,7 @@ export default function NavDrawer() {
         <div className="nav-drawer">
             {userState.loggedInUserId &&
                 <>
-                    <IconButton onClick={toggleDrawer} className={classes.menuButton}><MenuIcon /></IconButton>
+                    <IconButton onClick={toggleDrawer} className={classes.menuButton} title="Side Navigation"><MenuIcon /></IconButton>
                     <Drawer open={drawerOpen} classes={{ paper: classes.drawerPaper }} BackdropProps={{ invisible: true }}>
                         {list()}
                     </Drawer>
