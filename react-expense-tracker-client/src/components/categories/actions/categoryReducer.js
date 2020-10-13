@@ -1,5 +1,18 @@
 import * as ActionTypes from './categoryActionType'
 
+export const CategoryInitialState = {
+    categories: [],
+    categoryMap: {},
+    subcategoryMap: {},
+    selectedItemIds: [],
+    expandedRowIds: [],
+    selectedCategory: null,
+    selectedSubcategory: null,
+    parentCategory: null,
+    openAddSubcategoryDialog: false,
+    openConfirmDeleteDialog: false 
+}
+
 export default function categoryReducer(state, action) {
     switch (action.type) {
         case ActionTypes.ADD_CATEGORY:

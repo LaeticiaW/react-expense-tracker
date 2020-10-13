@@ -8,8 +8,8 @@ import CategoryDetails from './CategoryDetails'
 import SubcategoryDetails from './SubcategoryDetails'
 import CategoryTable from './CategoryTable'
 import CategoryToolbar from './CategoryToolbar'
-import CategoryReducer from './actions/categoryReducer'
-import * as CategoryActions from './actions/categoryActions'
+import CategoryReducer, { CategoryInitialState } from './actions/categoryReducer'
+import { setCategoryData } from './actions/categoryActions'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -31,25 +31,13 @@ const useStyles = makeStyles(theme => ({
 
 export default React.memo(function Categories() {
     const classes = useStyles()
-    const snackRef = useRef(null)
-    const initialState = {
-        categories: [],
-        categoryMap: {},
-        subcategoryMap: {},
-        selectedItemIds: [],
-        expandedRowIds: [],
-        selectedCategory: null,
-        selectedSubcategory: null,
-        parentCategory: null,
-        openAddSubcategoryDialog: false,
-        openConfirmDeleteDialog: false 
-    }
-    const [state, dispatch] = useReducer(CategoryReducer, initialState)  
+    const snackRef = useRef(null)    
+    const [state, dispatch] = useReducer(CategoryReducer, CategoryInitialState)  
       
     // Retrieve the category data
     const getCategories = useCallback(() => {             
         CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => { 
-            dispatch(CategoryActions.setCategoryData(categories, categoryMap, subcategoryMap))             
+            dispatch(setCategoryData(categories, categoryMap, subcategoryMap))             
         }).catch((error) => {
             console.error('Error retrieving categories:', error)
             snackRef.current.show(true, 'Error retrieving categories')                  

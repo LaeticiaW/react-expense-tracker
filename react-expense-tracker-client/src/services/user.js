@@ -7,9 +7,9 @@ export default {
      * Retrieve the user list
      */
     getUsers() {
-        return axios.get(this.userUrl).then(response => response.data)
+        return axios.get(this.userUrl).then(response => response.data)            
             .catch((error) => {
-                console.error('ExpenseService.getExpenses error:', error.response ? error.response : error)
+                console.error('UserService.getUsers error:', error.response ? error.response : error)
                 return Promise.reject(error.response)
             })
     },
@@ -29,12 +29,13 @@ export default {
      * Get the logged in userId from local storage and then retrieve the user object     
      */
     getCurrentUser() {        
-        let userId = localStorage.getItem('etLoginToken')
-        if (userId) {
-            this.getUser(userId).then(user => {                             
+        let userId = localStorage.getItem('etLoginToken')              
+        if (userId) {            
+            return this.getUser(userId).then(user => {                                          
                 return user
-            }).catch(error => {  
-                return {}                              
+            }).catch(error => { 
+                console.error('UserService.getCurrentUser error:', error)
+                return Promise.reject({})                       
             })
         } else {
             return {}
@@ -46,7 +47,11 @@ export default {
      */
     login(userId) {        
         return this.getUser(userId).then(user => {           
-            localStorage.setItem('etLoginToken', user.id)                   
+            localStorage.setItem('etLoginToken', user.id)  
+            return user                         
+        }).catch(error => {
+            console.error('UserService.login error:', error)
+                return Promise.reject({})   
         })
     },
 
