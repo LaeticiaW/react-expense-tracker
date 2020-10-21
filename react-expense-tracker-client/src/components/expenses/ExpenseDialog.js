@@ -6,7 +6,7 @@ import FormTextField from '../common/form/FormTextField'
 import FormSelect from '../common/form/FormSelect'
 import { DatePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const defaultExpense = {
-    trxDate: moment().format('YYYY-MM-DD'),
+    trxDate: dayjs().format('YYYY-MM-DD'),
     description: '',
     categoryId: '',
     subcategoryId: '',
@@ -56,7 +56,7 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
     function getDefaultExpense() {
         return {
             ...defaultExpense,
-            trxDate: moment().format('YYYY-MM-DD')
+            trxDate: dayjs().format('YYYY-MM-DD')
         }
     }
 
@@ -126,7 +126,7 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
 
     // Update staet when a date value changes
     const handleDateChange = (date) => {
-        let trxDate = moment(date).format('YYYY-MM-DD')
+        let trxDate = dayjs(date).format('YYYY-MM-DD')
         updateState({ expense: { ...state.expense, trxDate: trxDate } })
     }
 

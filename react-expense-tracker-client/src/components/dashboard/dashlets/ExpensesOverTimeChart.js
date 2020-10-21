@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import SnackMsg from '../../common/SnackMsg'
 import Dashlet from '../Dashlet'
 import DateRangeInput from '../../common/DateRangeInput'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import ExpenseService from '../../../services/expense'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
@@ -29,8 +29,8 @@ export default React.memo(function ExpensesOverTimeChart({ options }) {
 
     const [chartOptions, setChartOptions] = useState({})
     const [filter, setFilter] = useState({
-        startDate: moment().startOf('year').format('YYYY-MM-DD'),
-        endDate: moment().format('YYYY-MM-DD'),
+        startDate: dayjs().startOf('year').format('YYYY-MM-DD'),
+        endDate: dayjs().format('YYYY-MM-DD'),
         categoryIds: []
     })
 

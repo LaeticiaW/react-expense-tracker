@@ -3,7 +3,7 @@ import PageHeader from '../common/PageHeader'
 import TableFilter from '../common/TableFilter'
 import SnackMsg from '../common/SnackMsg'
 import DateRangeInput from '../common/DateRangeInput'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import ImportService from '../../services/import'
 import ExpenseService from '../../services/expense'
 import Fab from '@material-ui/core/Fab'
@@ -20,10 +20,10 @@ export default React.memo(function Imports() {
         refreshImports: false     
     })
     const [filter, setFilter] = useState({
-        startDate: moment().startOf('year').format('YYYY-MM-DD'),
-        startDateMs: moment().startOf('year').valueOf(),
-        endDate: moment().endOf('day').format('YYYY-MM-DD'),
-        endDateMs: moment().endOf('day').valueOf()
+        startDate: dayjs().startOf('year').format('YYYY-MM-DD'),
+        startDateMs: dayjs().startOf('year').valueOf(),
+        endDate: dayjs().endOf('day').format('YYYY-MM-DD'),
+        endDateMs: dayjs().endOf('day').valueOf()
     })
 
     // Update state

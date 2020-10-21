@@ -9,7 +9,7 @@ import { NavRoutes } from './routes.js'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import MomentUtils from '@date-io/moment'
+import DayjsUtils from "@date-io/dayjs"
 import { makeStyles } from '@material-ui/core/styles'
 
 const history = createBrowserHistory()
@@ -123,7 +123,7 @@ export const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
+            <MuiPickersUtilsProvider utils={DayjsUtils}>
                 <div className="app">
                     <Router history={history}>
                         <CssBaseline />

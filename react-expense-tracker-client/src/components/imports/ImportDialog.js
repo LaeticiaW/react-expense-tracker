@@ -5,7 +5,7 @@ import CategoryService from '../../services/category'
 import ExpenseService from '../../services/expense'
 import ImportUtil from '../../services/importUtil'
 import { makeStyles } from '@material-ui/core/styles'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import FormSelect from '../common/form/FormSelect'
 import FormTextField from '../common/form/FormTextField'
 import FormFileInput from '../common/form/FormFileInput'
@@ -171,7 +171,7 @@ export default React.memo(function ImportDialog({ open, handleClose }) {
 
         // Create an import details summary object
         const importDetails = {
-            importDate: moment().format('YYYY-MM-DD'),
+            importDate: dayjs().format('YYYY-MM-DD'),
             fileName: formData.csvFile.name,
             description: formData.description,
             recordCount: expenses.length,

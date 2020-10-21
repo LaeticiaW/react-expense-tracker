@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export default {
 
@@ -75,7 +75,7 @@ export default {
      * Determine if a date value is valid
      */
     isValidDate(value, dateFormat) {
-        if (!moment(value, dateFormat)) {
+        if (!dayjs(value, dateFormat)) {
             console.error('Invalid date:', value, 'format:', dateFormat)
             return false
         }

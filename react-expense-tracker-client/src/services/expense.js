@@ -1,5 +1,5 @@
 import axios from 'axios'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import numeral from 'numeral'
 
 export default {
@@ -178,7 +178,7 @@ export default {
                     series.push(seriesObj)
                     data = []
                 }
-                dt = moment(`${exp.trxYear.toString()}-${numeral(exp.trxMonth).format('00')}-01`, 'YYYY-MM-DD').valueOf()
+                dt = dayjs(`${exp.trxYear.toString()}-${numeral(exp.trxMonth).format('00')}-01`, 'YYYY-MM-DD').valueOf()
                 data.push([dt, Number(exp.totalAmount.toFixed(2))])
 
                 prevCatId = exp.categoryId
@@ -209,7 +209,7 @@ export default {
         // Normalize the trxDate to 'YYYY-MM-DD' and remove $ from amount
         expenses.forEach((exp) => {
             exp.importId = importId
-            exp.trxDate = moment(exp.trxDate, importDetails.dateFormat).format('YYYY-MM-DD')
+            exp.trxDate = dayjs(exp.trxDate, importDetails.dateFormat).format('YYYY-MM-DD')
 
             if (typeof exp.amount === 'string' && exp.amount.substr(0, 1) === '$') {
                 exp.amount = exp.amount.substr(1)

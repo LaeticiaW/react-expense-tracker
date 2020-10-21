@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
     appTitle: {
-        flexGrow: 1
+        flexGrow: 1,
+        fontSize: '1.25rem'
     },
     avatar: {
         color: theme.palette.primary.main,

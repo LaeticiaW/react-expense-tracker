@@ -3,15 +3,15 @@ import { render, screen } from 'testUtils'
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import DateRangeInput from './DateRangeInput'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { waitFor } from '../../utils/testUtils'
 
 function TestDateRangeInputWrapper() {
     const [startDate, setStartDate] = useState('2020-10-05')
     const [endDate, setEndDate] = useState('2020-10-08')
     const handleDateChange = (startDateMs, endDateMs) => {
-        let start = moment(startDateMs).format('YYYY-MM-DD')
-        let end = moment(endDateMs).format('YYYY-MM-DD')
+        let start = dayjs(startDateMs).format('YYYY-MM-DD')
+        let end = dayjs(endDateMs).format('YYYY-MM-DD')
         setStartDate(start)       
         setEndDate(end)        
     }

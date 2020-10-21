@@ -30,6 +30,10 @@ const useStyles = makeStyles(theme => ({
         width: '50px !important',
         maxWidth: '50px !important',
         minWidth: '50px !important'
+    },
+    listText: {
+        fontSize: '0.875rem',
+        fontWeight: '500'       
     }
 }))
 
@@ -49,7 +53,7 @@ export default function NavDrawer() {
                 return (
                     <ListItem button component={Link} to={route.path} key={route.name} onClick={toggleDrawer}>
                         <ListItemIcon className={classes.listIcon}>{route.meta.icon()}</ListItemIcon>
-                        <ListItemText>{route.name}</ListItemText>
+                        <ListItemText disableTypography={true} className={classes.listText}>{route.name}</ListItemText>
                     </ListItem>
                 )
             }

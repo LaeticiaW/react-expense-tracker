@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import numeral from 'numeral'
 
 export default {
@@ -78,7 +78,7 @@ export default {
         }
 
         // Format the date
-        const formattedDate = moment(ctx.points[0].key).format('MMMM YYYY')
+        const formattedDate = dayjs(ctx.points[0].key).format('MMMM YYYY')
 
         let tooltipMarkup = `<div class="graph-tooltip" style="opacity: 1"><div class="graph-tooltip-inner" style="opacity: 1 z-index: 101"><b>${formattedDate}</b>`
         let value

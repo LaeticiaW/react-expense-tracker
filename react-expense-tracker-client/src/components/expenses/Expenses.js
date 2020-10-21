@@ -10,7 +10,7 @@ import ExpenseService from '../../services/expense'
 import DateRangeInput from '../common/DateRangeInput'
 import CategorySelect from '../common/CategorySelect'
 import SnackMsg from '../common/SnackMsg'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export default React.memo(function Expenses() {
     const snackRef = useRef(null)
@@ -25,10 +25,10 @@ export default React.memo(function Expenses() {
     })
     const [filter, setFilter] = useState({
         categoryIds: [],
-        startDate: moment().startOf('year').format('YYYY-MM-DD'),
-        startDateMs: moment().startOf('year').valueOf(),
-        endDate: moment().endOf('day').format('YYYY-MM-DD'),
-        endDateMs: moment().endOf('day').valueOf()
+        startDate: dayjs().startOf('year').format('YYYY-MM-DD'),
+        startDateMs: dayjs().startOf('year').valueOf(),
+        endDate: dayjs().endOf('day').format('YYYY-MM-DD'),
+        endDateMs: dayjs().endOf('day').valueOf()
     })
     
     // Update state

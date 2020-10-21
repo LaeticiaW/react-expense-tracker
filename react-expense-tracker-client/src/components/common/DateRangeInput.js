@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DatePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const useStyles = makeStyles(theme => ({
     dateRangeContainer: {
@@ -27,14 +27,14 @@ const useStyles = makeStyles(theme => ({
 export default React.memo(function DateRangeInput({ startDate, endDate, handleDateChange }) {
     const classes = useStyles()
 
-    const [startDt, setStartDt] = useState(startDate || moment().startOf('year').format('YYYY-MM-DD'))
-    const [endDt, setEndDt] = useState(endDate || moment().endOf('day').format('YYYY-MM-DD'))
-    const [startDtMs, setStartDtMs] = useState(moment(startDt).valueOf())
-    const [endDtMs, setEndDtMs] = useState(moment(endDt).valueOf())
+    const [startDt, setStartDt] = useState(startDate || dayjs().startOf('year').format('YYYY-MM-DD'))
+    const [endDt, setEndDt] = useState(endDate || dayjs().endOf('day').format('YYYY-MM-DD'))
+    const [startDtMs, setStartDtMs] = useState(dayjs(startDt).valueOf())
+    const [endDtMs, setEndDtMs] = useState(dayjs(endDt).valueOf())
 
     const handleChange = (startDateMs, endDateMs) => {
-        let start = moment(startDateMs).format('YYYY-MM-DD')
-        let end = moment(endDateMs).format('YYYY-MM-DD')
+        let start = dayjs(startDateMs).format('YYYY-MM-DD')
+        let end = dayjs(endDateMs).format('YYYY-MM-DD')
 
         setStartDt(start)
         setStartDtMs(startDateMs)

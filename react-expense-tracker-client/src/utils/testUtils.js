@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import MomentUtils from '@date-io/moment'
+import DayjsUtils from "@date-io/dayjs"
 import { initialState } from '../store/store'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -14,7 +14,7 @@ let store
 
 const AllTheProviders = ({ children }) => {
   return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <MuiPickersUtilsProvider utils={DayjsUtils}>
       <div style={{ height: '1000px', width: '1000px' }}>
         {children}
       </div>
