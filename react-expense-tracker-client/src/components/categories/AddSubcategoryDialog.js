@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import FormTextField from '../common/form/FormTextField'
 import { v4 as uuidv4 } from 'uuid'
 import Util from '../../services/util'
+import PropTypes, { CategoryType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     dialogMsg: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function AddSubcategoryDialog({ open, onClose, category }) {
+const AddSubcategoryDialog = React.memo(({ open, onClose, category }) => {
     const classes = useStyles()
 
     const [state, setState] = useState({
@@ -119,3 +120,12 @@ export default React.memo(function AddSubcategoryDialog({ open, onClose, categor
         </div>
     )
 })
+
+// Prop Types
+AddSubcategoryDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    category: CategoryType
+}
+
+export default AddSubcategoryDialog

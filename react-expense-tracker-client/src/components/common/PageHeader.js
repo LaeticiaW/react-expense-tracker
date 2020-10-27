@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     pageTitle: {
@@ -10,10 +11,17 @@ const useStyles = makeStyles(theme => ({
     }
   }))
 
-export default React.memo(function PageHeader({pageTitle}) {
+const PageHeader = React.memo(({pageTitle}) => {
     const classes = useStyles()
    
     return (
         <h2 className={classes.pageTitle}>{pageTitle}</h2>
     )
 })
+
+// Prop Types
+PageHeader.propTypes = {
+    pageTitle: PropTypes.string.isRequired
+}
+
+export default PageHeader

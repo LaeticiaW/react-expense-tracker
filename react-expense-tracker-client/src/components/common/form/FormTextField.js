@@ -1,6 +1,7 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -8,8 +9,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function FormTextField({ id, label, value, onChange, error, helperText, 
-    type, focus }) {
+const FormTextField = React.memo(({ id, label, value, onChange, error, helperText, type, focus }) => {
     const classes = useStyles()
     const fieldType = type ? type : 'text'
     const fieldFocus = focus ? input => input && input.focus() : () => {}    
@@ -22,3 +22,16 @@ export default React.memo(function FormTextField({ id, label, value, onChange, e
         </div>
     )
 })
+
+FormTextField.propTypes = {
+    id: PropTypes.string.isRequired, 
+    label: PropTypes.string.isRequired, 
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
+    onChange: PropTypes.func.isRequired, 
+    error: PropTypes.bool, 
+    helperText: PropTypes.string, 
+    type: PropTypes.string, 
+    focus: PropTypes.bool
+}
+
+export default FormTextField

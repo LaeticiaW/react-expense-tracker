@@ -8,6 +8,7 @@ import CategoryService from '../../services/category'
 import SnackMsg from '../common/SnackMsg'
 import ConfirmDialog from '../common/ConfirmDialog'
 import * as CategoryActions from './actions/categoryActions'
+import PropTypes, { CategoryStateType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     toolbar: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function CategoryToolbar({ dispatch, state, getCategories }) {
+const CategoryToolbar = React.memo(({ dispatch, state, getCategories }) => {
     const classes = useStyles()
     const snackRef = useRef(null)
    
@@ -170,7 +171,7 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
             </Toolbar>
 
             <AddCategoryDialog open={openAddCategoryDialog} onClose={handleCloseAddCategoryDialog} categoryState={state} />
-
+            
             <AddSubcategoryDialog open={state.openAddSubcategoryDialog} onClose={handleCloseAddSubcategoryDialog}
                 category={state.selectedCategory} />
 
@@ -182,3 +183,12 @@ export default React.memo(function CategoryToolbar({ dispatch, state, getCategor
         </>
     )
 })
+
+// Prop Types
+CategoryToolbar.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    state: CategoryStateType.isRequired,
+    getCategories: PropTypes.func.isRequired
+}
+
+export default CategoryToolbar

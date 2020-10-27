@@ -8,6 +8,7 @@ import ExpenseDialog from './ExpenseDialog'
 import ActionCell from '../common/ActionCell'
 import Util from '../../services/util'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes, { ExpenseType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -51,7 +52,7 @@ const summaryItems = [
 
 const decimalColumns = ['amount']
 
-export default React.memo(function ExpensesTable({ expenses, handleDelete, handleUpdate }) {
+const ExpensesTable = React.memo(({ expenses, handleDelete, handleUpdate }) => {
     const classes = useStyles()
 
     const [state, setState] = useState({
@@ -153,3 +154,12 @@ export default React.memo(function ExpensesTable({ expenses, handleDelete, handl
         </div>
     )
 })
+
+// Prop Types
+ExpensesTable.propTypes = {
+    expenses: PropTypes.arrayOf(ExpenseType).isRequired, 
+    handleDelete: PropTypes.func.isRequired, 
+    handleUpdate: PropTypes.func.isRequired
+}
+
+export default ExpensesTable

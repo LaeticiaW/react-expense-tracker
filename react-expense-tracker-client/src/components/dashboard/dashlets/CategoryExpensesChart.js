@@ -9,6 +9,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import drilldown from 'highcharts/modules/drilldown'
 import Util from '../../../services/util'
+import { DashletOptionsType } from 'types'
 
 drilldown(Highcharts)
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function CategoryExpensesChart({ options }) {
+const CategoryExpensesChart = React.memo(({ options }) => {
     const classes = useStyles()
     const snackRef = useRef(null)
 
@@ -158,7 +159,7 @@ export default React.memo(function CategoryExpensesChart({ options }) {
             <DateRangeInput startDate={filter.startDate} endDate={filter.endDate} handleDateChange={handleDateChange} />
         )
     }
-
+    
     return (
         <>
             <Dashlet options={options} renderActions={renderActions}>
@@ -173,3 +174,10 @@ export default React.memo(function CategoryExpensesChart({ options }) {
         </>
     )
 })
+
+// Prop Types
+CategoryExpensesChart.propTypes = {
+    options: DashletOptionsType.isRequired
+}
+
+export default CategoryExpensesChart

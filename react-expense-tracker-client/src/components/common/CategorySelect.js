@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {TextField, MenuItem} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes, { CategoryType } from 'types'
 
 const useStyles = makeStyles(theme => ({    
     categorySelect: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function CategorySelect({ selectCategories, categoryMap, handleCategoryChange }) {
+const CategorySelect = React.memo(({ selectCategories, categoryMap, handleCategoryChange }) => {
     const classes = useStyles()
 
     const [categoryIds, setCategoryIds] = useState([])
@@ -53,3 +54,12 @@ export default React.memo(function CategorySelect({ selectCategories, categoryMa
         </TextField >
     )
 })
+
+// Prop Types
+CategorySelect.propTypes = {
+    selectCategories: PropTypes.arrayOf(CategoryType).isRequired, 
+    categoryMap: PropTypes.objectOf(PropTypes.string).isRequired,
+    handleCategoryChange: PropTypes.func.isRequired
+}
+
+export default CategorySelect

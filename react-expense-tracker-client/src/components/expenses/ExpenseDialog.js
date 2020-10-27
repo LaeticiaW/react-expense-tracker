@@ -7,6 +7,7 @@ import FormSelect from '../common/form/FormSelect'
 import { DatePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
 import dayjs from 'dayjs'
+import PropTypes, { ExpenseType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -33,7 +34,7 @@ const defaultErrors = {
     amount: ''
 }
 
-export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpense }) {
+const ExpenseDialog = React.memo(({ open, handleClose, dialogExpense }) => {
     const classes = useStyles()
 
     const [state, setState] = useState({
@@ -211,3 +212,12 @@ export default React.memo(function ExpenseDialog({ open, handleClose, dialogExpe
         </Dialog>
     )
 })
+
+// Prop Types
+ExpenseDialog.propTypes = {
+    open: PropTypes.bool.isRequired, 
+    handleClose: PropTypes.func.isRequired, 
+    dialogExpense: ExpenseType
+}
+
+export default ExpenseDialog

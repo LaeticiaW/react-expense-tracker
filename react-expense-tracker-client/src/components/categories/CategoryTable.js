@@ -6,6 +6,7 @@ import { IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon, Add as AddIcon } from '@material-ui/icons'
 import ActionCell from '../common/ActionCell'
 import * as CategoryActions from './actions/categoryActions'
+import PropTypes, { CategoryStateType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -26,7 +27,7 @@ const columnExtensions = [
     { columnName: 'actions', width: 50 }
 ]
 
-export default React.memo(function CategoryTable({ dispatch, state }) {
+const CategoryTable = React.memo(({ dispatch, state }) => {
     const classes = useStyles()
     const prevSelectedItemId = null
 
@@ -144,3 +145,11 @@ export default React.memo(function CategoryTable({ dispatch, state }) {
         </Grid>
     )
 })
+
+// Prop Types
+CategoryTable.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    state: CategoryStateType.isRequired
+}
+
+export default CategoryTable

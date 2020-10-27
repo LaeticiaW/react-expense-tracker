@@ -8,6 +8,7 @@ import ExpenseService from '../../../services/expense'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Util from '../../../services/util'
+import { DashletOptionsType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     contentContainer: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function ExpensesOverTimeChart({ options }) {
+const ExpensesOverTimeChart = React.memo(({ options }) => {
     const classes = useStyles()
     const snackRef = useRef(null)
 
@@ -106,7 +107,7 @@ export default React.memo(function ExpensesOverTimeChart({ options }) {
             <DateRangeInput startDate={filter.startDate} endDate={filter.endDate} handleDateChange={handleDateChange} />
         )
     }
-   
+       
     return (
         <>
             <Dashlet options={options} renderActions={renderActions}>
@@ -120,3 +121,10 @@ export default React.memo(function ExpensesOverTimeChart({ options }) {
         </>
     )
 })
+
+// Prop Types
+ExpensesOverTimeChart.propTypes = {
+    options: DashletOptionsType.isRequired
+}
+
+export default ExpensesOverTimeChart

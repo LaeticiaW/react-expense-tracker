@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { DatePicker } from '@material-ui/pickers'
 import { makeStyles } from '@material-ui/core/styles'
 import dayjs from 'dayjs'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     dateRangeContainer: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function DateRangeInput({ startDate, endDate, handleDateChange }) {
+const DateRangeInput = React.memo(({ startDate, endDate, handleDateChange }) => {
     const classes = useStyles()
 
     const [startDt, setStartDt] = useState(startDate || dayjs().startOf('year').format('YYYY-MM-DD'))
@@ -66,3 +67,12 @@ export default React.memo(function DateRangeInput({ startDate, endDate, handleDa
 }, (prevProps, nextProps) => {
     return (prevProps.startDate === nextProps.startDate && prevProps.endDate === nextProps.endDate)
 })
+
+// Prop Types
+DateRangeInput.propTypes = {
+    startDate: PropTypes.string.isRequired, 
+    endDate: PropTypes.string.isRequired, 
+    handleDateChange: PropTypes.func.isRequired
+}
+
+export default DateRangeInput

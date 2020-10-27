@@ -1,6 +1,7 @@
 import React from 'react'
 import { Checkbox, FormControlLabel} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -8,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function FormCheckbox({ id, label, value, onChange }) {
+const FormCheckbox = React.memo(({ id, label, value, onChange }) => {
     const classes = useStyles()
 
     return (
@@ -22,3 +23,12 @@ export default React.memo(function FormCheckbox({ id, label, value, onChange }) 
         </div>
     )
 })
+
+FormCheckbox.propTypes = {
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    value: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired
+}
+
+export default FormCheckbox

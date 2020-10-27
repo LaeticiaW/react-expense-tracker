@@ -1,6 +1,7 @@
 import React from 'react'
 import {LinearProgress, Fade} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     loading: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function Loading({ isLoading }) {
+const Loading = React.memo(({ isLoading }) => {
     const classes = useStyles()
 
     return (
@@ -21,3 +22,10 @@ export default React.memo(function Loading({ isLoading }) {
         </div>
     )
 })
+
+// Prop Types
+Loading.propTypes = {
+    isLoading: PropTypes.bool.isRequired
+}
+
+export default Loading

@@ -5,6 +5,7 @@ import CategoryService from '../../services/category'
 import { makeStyles } from '@material-ui/core/styles'
 import FormTextField from '../common/form/FormTextField'
 import Util from '../../services/util'
+import PropTypes, { CategoryType, SubcategoryType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function UpdateSubcategoryDialog({ open, onClose, subcategory, parentCategory }) {
+const UpdateSubcategoryDialog = React.memo(({ open, onClose, subcategory, parentCategory }) => {
     const classes = useStyles()
 
     const [state, setState] = useState({       
@@ -219,4 +220,14 @@ export default React.memo(function UpdateSubcategoryDialog({ open, onClose, subc
             </Dialog>        
     )
 })
+
+// Prop Types
+UpdateSubcategoryDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    subcategory: SubcategoryType.isRequired,
+    parentCategory: CategoryType.isRequired
+}
+
+export default UpdateSubcategoryDialog
 

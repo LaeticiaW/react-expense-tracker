@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import ActionCell from '../common/ActionCell'
 import ConfirmDialog from '../common/ConfirmDialog'
 import clsx from 'clsx'
+import PropTypes, {ImportType} from 'types'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -77,7 +78,7 @@ const defaultSorting = [
     { columnName: 'importDate', direction: 'desc' }
 ]
 
-export default React.memo(function ImportsTable({ imports, handleDelete }) {
+const ImportsTable = React.memo(({ imports, handleDelete }) => {
     const classes = useStyles()
 
     const [deleteImport, setDeleteImport] = useState({})
@@ -147,3 +148,11 @@ export default React.memo(function ImportsTable({ imports, handleDelete }) {
 }, (prevProps, nextProps) => {
     return prevProps.imports === nextProps.imports
 })
+
+// Prop Types 
+ImportsTable.propTypes = {
+    imports: PropTypes.arrayOf(ImportType),
+    handleDelete: PropTypes.func
+}
+
+export default ImportsTable

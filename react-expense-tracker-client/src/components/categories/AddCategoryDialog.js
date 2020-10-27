@@ -3,6 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider } fr
 import CategoryService from '../../services/category'
 import { makeStyles } from '@material-ui/core/styles'
 import FormTextField from '../common/form/FormTextField'
+import PropTypes, { CategoryStateType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     dialogMsg: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function AddCategoryDialog({ open, onClose, categoryState }) {
+const AddCategoryDialog = React.memo(({ open, onClose, categoryState }) => {
     const classes = useStyles()
     const formRef = useRef(null)
 
@@ -109,3 +110,12 @@ export default React.memo(function AddCategoryDialog({ open, onClose, categorySt
         </div>
     )
 })
+
+// Prop Types
+AddCategoryDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    categoryState: CategoryStateType.isRequired
+}
+
+export default AddCategoryDialog

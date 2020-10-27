@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -8,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function ConfirmDialog (props) {
+const ConfirmDialog = React.memo((props) => {
     const { open, title, msg, onConfirm, onCancel } = props
     const classes = useStyles()
 
@@ -27,3 +28,14 @@ export default React.memo(function ConfirmDialog (props) {
         </Dialog>
     )
 })
+
+// Prop Types
+ConfirmDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
+    msg: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired
+}
+
+export default ConfirmDialog

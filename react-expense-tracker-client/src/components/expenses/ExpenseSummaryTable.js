@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Util from '../../services/util'
 import clsx from 'clsx'
+import PropTypes, { ExpenseSummaryType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -70,7 +71,7 @@ const defaultSorting = [
 const decimalColumns = ['percent', 'totalAmount']
 const categoryColumns = ['categoryName']
 
-export default React.memo(function ExpenseSummaryTable({ expenseTotals, totalAmount, expandedRowIds }) {
+const ExpenseSummaryTable = React.memo(({ expenseTotals, totalAmount, expandedRowIds }) => {
     const classes = useStyles()
 
     // Sort method for the subcategory totals
@@ -150,3 +151,12 @@ export default React.memo(function ExpenseSummaryTable({ expenseTotals, totalAmo
         (prevProps.totalAmount === nextProps.totalAmount) &&
         (prevProps.expandedRowIds === nextProps.expandedRowIds))
 })
+
+// Prop Types
+ExpenseSummaryTable.propTypes = {
+    expenseTotals: PropTypes.arrayOf(ExpenseSummaryType).isRequired, 
+    totalAmount: PropTypes.number.isRequired, 
+    expandedRowIds: PropTypes.arrayOf(PropTypes.string).isRequired
+}
+
+export default ExpenseSummaryTable

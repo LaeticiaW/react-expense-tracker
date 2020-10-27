@@ -2,6 +2,7 @@ import React from 'react'
 import { TextField, IconButton, InputAdornment } from '@material-ui/core'
 import { AttachFile as AttachFileIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function CategorySelect({ id, value, onChange, label, error, helperText }) {
+const FormFileInput = React.memo(({ id, value, onChange, label, error, helperText }) => {
     const classes = useStyles()
 
     return (
@@ -41,3 +42,14 @@ export default React.memo(function CategorySelect({ id, value, onChange, label, 
         </div>
     )
 })
+
+FormFileInput.propTypes = {
+    id: PropTypes.string.isRequired, 
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]), 
+    onChange: PropTypes.func.isRequired, 
+    label: PropTypes.string.isRequired, 
+    error: PropTypes.bool.isRequired, 
+    helperText: PropTypes.string
+}
+
+export default FormFileInput

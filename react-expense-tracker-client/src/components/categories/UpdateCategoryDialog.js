@@ -7,6 +7,7 @@ import FormTextField from '../common/form/FormTextField'
 import Util from '../../services/util'
 import Fab from '@material-ui/core/Fab'
 import { v4 as uuidv4 } from 'uuid'
+import PropTypes, { CategoryType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     inputControl: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function UpdateCategoryDialog({ open, onClose, category }) {
+const UpdateCategoryDialog = React.memo(({ open, onClose, category }) => {
     const classes = useStyles()
 
     const [state, setState] = useState({
@@ -214,3 +215,12 @@ export default React.memo(function UpdateCategoryDialog({ open, onClose, categor
         </div>
     )
 })
+
+// Prop Types
+UpdateCategoryDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    category: CategoryType.isRequired
+}
+
+export default UpdateCategoryDialog

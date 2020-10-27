@@ -4,6 +4,7 @@ import { Fullscreen as FullScreenIcon, FullscreenExit as FullScreenExitIcon } fr
 import { makeStyles } from '@material-ui/core/styles'
 import DashboardContext from './DashboardContext'
 import clsx from 'clsx'
+import PropTypes, { DashletOptionsType } from 'types'
 
 const useStyles = makeStyles(theme => ({
     dashlet: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function Dashlet({ options, renderActions, children }) {
+const Dashlet = React.memo(({ options, renderActions, children }) => {
     const classes = useStyles()
     const dashboardContext = useContext(DashboardContext)
 
@@ -79,3 +80,12 @@ export default React.memo(function Dashlet({ options, renderActions, children })
         </Paper>
     )
 })
+
+// Prop Types
+Dashlet.propTypes = {
+    options: DashletOptionsType.isRequired, 
+    renderActions: PropTypes.func.isRequired, 
+    children: PropTypes.node.isRequired
+}
+
+export default Dashlet

@@ -11,6 +11,7 @@ import FormTextField from '../common/form/FormTextField'
 import FormFileInput from '../common/form/FormFileInput'
 import FormCheckbox from '../common/form/FormCheckbox'
 import ConfirmDialog from '../common/ConfirmDialog'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles(theme => ({
     dialogContent: {
@@ -75,7 +76,7 @@ const defaultFormValues = {
     descriptionField: ''
 }
 
-export default React.memo(function ImportDialog({ open, handleClose }) {
+const ImportDialog = React.memo(({ open, handleClose }) => {
     const classes = useStyles()
 
     const [categories, setCategories] = useState([])
@@ -302,3 +303,11 @@ export default React.memo(function ImportDialog({ open, handleClose }) {
 }, (prevProps, nextProps) => {
     return prevProps.open === nextProps.open
 })
+
+// Prop Types
+ImportDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func
+}
+
+export default ImportDialog

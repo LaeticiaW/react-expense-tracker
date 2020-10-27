@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
+import PropTypes from 'types'
 
 const useStyles = makeStyles(theme => ({   
     toolbar: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default React.memo(function TableFilter({renderInputs, renderActions}) {
+const TableFilter = React.memo(({renderInputs, renderActions}) => {
   const classes = useStyles()
     
   return (         
@@ -30,3 +31,11 @@ export default React.memo(function TableFilter({renderInputs, renderActions}) {
         
   )
 })
+
+// Prop Types
+TableFilter.propTypes = {
+    renderInputs: PropTypes.func.isRequired,
+    renderActions: PropTypes.func
+}
+
+export default TableFilter
