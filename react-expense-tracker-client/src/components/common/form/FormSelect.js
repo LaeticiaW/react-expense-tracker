@@ -35,7 +35,7 @@ const FormSelect = React.memo(({ id, value, onChange, label, selectList, error, 
 })
 
 FormSelect.propTypes = {
-    id: PropTypes.string.isRequired, 
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, 
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
     onChange: PropTypes.func.isRequired, 
     label: PropTypes.string.isRequired, 

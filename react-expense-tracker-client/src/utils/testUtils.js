@@ -26,7 +26,7 @@ const AllTheProvidersWithStore = ({ children }) => {
   const history = createBrowserHistory()
   return (
     <Provider store={store}>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <MuiPickersUtilsProvider utils={DayjsUtils}>
         <Router history={history}>
           <div style={{ height: '1000px', width: '1000px' }}>
             {children}

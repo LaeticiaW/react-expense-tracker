@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Card, CardContent, Toolbar, Fab } from '@material-ui/core'
 import { Edit as EditIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import UpdateSubcategoryDialog from './UpdateSubcategoryDialog'
-import PropTypes, { SubcategoryType, CategoryType } from 'types'
+import { SubcategoryType, CategoryType } from 'types'
+import { CategoryContext } from './CategoryContext'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -32,10 +33,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const SubcategoryDetails = React.memo(({ subcategory, parentCategory, getCategories }) => {
+const SubcategoryDetails = React.memo(({ subcategory, parentCategory }) => {
     const classes = useStyles()
-
     const [openDialog, setOpenDialog] = useState(false)
+    const { getCategories } = useContext(CategoryContext)
 
     // Show the update subcategory dialog
     const handleShowDialog = () => {
@@ -86,8 +87,7 @@ const SubcategoryDetails = React.memo(({ subcategory, parentCategory, getCategor
 // Prop Types
 SubcategoryDetails.propTypes = {
     subcategory: SubcategoryType.isRequired,
-    parentCategory: CategoryType.isRequired,
-    getCategories: PropTypes.func.isRequired
+    parentCategory: CategoryType.isRequired    
 }
 
 export default SubcategoryDetails

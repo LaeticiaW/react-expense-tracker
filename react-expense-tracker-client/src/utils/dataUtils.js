@@ -30,7 +30,7 @@ export const categoriesData = [
 
 export const expensesData = [
     {
-        _id: 503,
+        _id: '503',
         trxDate: '2020-05-01',
         trxYear: 2020,
         trxMonth: 2,
@@ -42,7 +42,7 @@ export const expensesData = [
         amount: '74.15'
     },
     {
-        _id: 502,
+        _id: '502',
         trxDate: '2020-04-01',
         trxYear: 2020,
         trxMonth: 2,
@@ -54,7 +54,7 @@ export const expensesData = [
         amount: '257.28'
     },
     {
-        _id: 501,
+        _id: '501',
         trxDate: '2020-03-01',
         trxYear: 2020,
         trxMonth: 2,

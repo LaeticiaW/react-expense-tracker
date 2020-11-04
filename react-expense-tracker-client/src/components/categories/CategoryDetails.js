@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Card, CardContent, Toolbar, Fab } from '@material-ui/core'
 import { Edit as EditIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import UpdateCategoryDialog from './UpdateCategoryDialog'
-import PropTypes, { CategoryType } from 'types'
+import { CategoryType } from 'types'
+import { CategoryContext } from './CategoryContext'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -33,10 +34,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const CategoryDetails = React.memo(({ category, getCategories }) => {
+const CategoryDetails = React.memo(({ category }) => {
     const classes = useStyles()
-
     const [openDialog, setOpenDialog] = useState(false)
+    const { getCategories } = useContext(CategoryContext)
 
     const handleShowDialog = () => {
         setOpenDialog(true)
@@ -84,8 +85,7 @@ const CategoryDetails = React.memo(({ category, getCategories }) => {
 
 // Prop Types
 CategoryDetails.propTypes = {
-    category: CategoryType,
-    getCategories: PropTypes.func.isRequired    
+    category: CategoryType    
 }
 
 export default CategoryDetails

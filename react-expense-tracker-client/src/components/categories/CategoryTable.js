@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { TreeDataState, CustomTreeData, SelectionState } from '@devexpress/dx-react-grid'
 import { Grid, Table, TableTreeColumn, TableSelection } from '@devexpress/dx-react-grid-material-ui'
@@ -6,7 +6,7 @@ import { IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon, Add as AddIcon } from '@material-ui/icons'
 import ActionCell from '../common/ActionCell'
 import * as CategoryActions from './actions/categoryActions'
-import PropTypes, { CategoryStateType } from 'types'
+import { CategoryContext } from './CategoryContext'
 
 const useStyles = makeStyles(theme => ({
     icon: {
@@ -27,25 +27,26 @@ const columnExtensions = [
     { columnName: 'actions', width: 50 }
 ]
 
-const CategoryTable = React.memo(({ dispatch, state }) => {
+const CategoryTable = React.memo(() => {
     const classes = useStyles()
     const prevSelectedItemId = null
+    const { categoryState, categoryDispatch } = useContext(CategoryContext)
 
     // When the category list is first retrieved, set the selected category.  Every time the category list
     // changes, reset the selected category and subcategory to the current data.
     useEffect(() => {
-        if (state.categories.length && !state.selectedCategory && !state.selectedSubcategory) {
-            dispatch(CategoryActions.initialSelectCategory(state.categories[0]))           
+        if (categoryState.categories.length && !categoryState.selectedCategory && !categoryState.selectedSubcategory) {
+            categoryDispatch(CategoryActions.initialSelectCategory(categoryState.categories[0]))           
         } else {
             // Reset the selected category and subcategory so that the reference matches the categories list
-            if (state.selectedCategory) {
-                dispatch(CategoryActions.resetSelectedCategory())                               
+            if (categoryState.selectedCategory) {
+                categoryDispatch(CategoryActions.resetSelectedCategory())                               
             }
-            if (state.selectedSubcategory) {
-                dispatch(CategoryActions.resetSelectedSubcategory())                
+            if (categoryState.selectedSubcategory) {
+                categoryDispatch(CategoryActions.resetSelectedSubcategory())                
             }
         }
-    }, [dispatch, state.categories, state.selectedCategory, state.selectedSubcategory])
+    }, [categoryDispatch, categoryState.categories, categoryState.selectedCategory, categoryState.selectedSubcategory])
 
     
     // Determine if the specified item is a category or a subcategory     
@@ -63,13 +64,13 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
             selectedItemId = selectedItemIds[selectedItemIds.length - 1]
         }
 
-        const selectedItem = state.categoryMap[selectedItemId] || state.subcategoryMap[selectedItemId]
+        const selectedItem = categoryState.categoryMap[selectedItemId] || categoryState.subcategoryMap[selectedItemId]
 
         if (selectedItem) {
             if (isSubcategory(selectedItem)) {
-                dispatch(CategoryActions.selectSubcategory(selectedItem))                
+                categoryDispatch(CategoryActions.selectSubcategory(selectedItem))                
             } else {
-                dispatch(CategoryActions.selectCategory(selectedItem))                
+                categoryDispatch(CategoryActions.selectCategory(selectedItem))                
             }
         }
     }
@@ -77,9 +78,9 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
     // Maintain the expanded row ids when the user expands or collapses a category.  If the current selected item
     // is a subcategory, but the user is collapsing the parent category, change the selection to the parent category 
     const handleExpandedRowsChange = (expandedRowIds) => {
-        if (state.selectedSubcategory) {
-            if (!expandedRowIds.includes(state.selectedSubcategory.parentCategoryId)) {
-                dispatch(CategoryActions.collapseCategoryWithSelectedSubcategory())                
+        if (categoryState.selectedSubcategory) {
+            if (!expandedRowIds.includes(categoryState.selectedSubcategory.parentCategoryId)) {
+                categoryDispatch(CategoryActions.collapseCategoryWithSelectedSubcategory())                
             }
         }
         setExpandedRowIds(expandedRowIds)
@@ -87,17 +88,17 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
 
     // Show the add subcategory dialog
     const showAddSubcategoryDialog = () => {
-        dispatch(CategoryActions.showAddSubcategoryDialog())        
+        categoryDispatch(CategoryActions.showAddSubcategoryDialog())        
     }
 
     // Set the expanded row ids
     const setExpandedRowIds = (expandedRowIds) => {
-        dispatch(CategoryActions.expandCategoryRows(expandedRowIds))        
+        categoryDispatch(CategoryActions.expandCategoryRows(expandedRowIds))        
     }
 
     // Open the Confirm Delete dialog
     const confirmDelete = () => {
-        dispatch(CategoryActions.confirmDelete())       
+        categoryDispatch(CategoryActions.confirmDelete())       
     }
 
     // Cell component with custom Actions cell
@@ -108,9 +109,9 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
 
         let isSelectedItem = false
         if (isCategory) {
-            isSelectedItem = state.selectedCategory && item._id === state.selectedCategory._id
+            isSelectedItem = categoryState.selectedCategory && item._id === categoryState.selectedCategory._id
         } else {
-            isSelectedItem = state.selectedSubcategory && item.id === state.selectedSubcategory.id
+            isSelectedItem = categoryState.selectedSubcategory && item.id === categoryState.selectedSubcategory.id
         }
 
         if (columnName === 'actions') {
@@ -135,9 +136,9 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
     }
     
     return (
-        <Grid rows={state.categories} columns={columns} getRowId={getRowId}>
-            <SelectionState selection={state.selectedItemIds} onSelectionChange={handleItemSelected} />
-            <TreeDataState expandedRowIds={state.expandedRowIds} onExpandedRowIdsChange={handleExpandedRowsChange} />
+        <Grid rows={categoryState.categories} columns={columns} getRowId={getRowId}>
+            <SelectionState selection={categoryState.selectedItemIds} onSelectionChange={handleItemSelected} />
+            <TreeDataState expandedRowIds={categoryState.expandedRowIds} onExpandedRowIdsChange={handleExpandedRowsChange} />
             <CustomTreeData getChildRows={getChildRows} />
             <Table columnExtensions={columnExtensions} cellComponent={Cell} />
             <TableSelection selectByRowClick highlightRow showSelectionColumn={false} />
@@ -145,11 +146,5 @@ const CategoryTable = React.memo(({ dispatch, state }) => {
         </Grid>
     )
 })
-
-// Prop Types
-CategoryTable.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    state: CategoryStateType.isRequired
-}
 
 export default CategoryTable

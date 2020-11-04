@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useReducer } from 'react'
+import React, { useEffect, useRef, useCallback, useReducer, useMemo } from 'react'
 import PageHeader from '../common/PageHeader'
 import { makeStyles } from '@material-ui/core/styles'
 import CategoryService from '../../services/category'
@@ -10,6 +10,7 @@ import CategoryTable from './CategoryTable'
 import CategoryToolbar from './CategoryToolbar'
 import CategoryReducer, { CategoryInitialState } from './actions/categoryReducer'
 import { setCategoryData } from './actions/categoryActions'
+import { CategoryContext } from './CategoryContext'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -32,17 +33,22 @@ const useStyles = makeStyles(theme => ({
 export default React.memo(function Categories() {
     const classes = useStyles()
     const snackRef = useRef(null)    
-    const [state, dispatch] = useReducer(CategoryReducer, CategoryInitialState)  
+    const [categoryState, categoryDispatch] = useReducer(CategoryReducer, CategoryInitialState)  
       
     // Retrieve the category data
     const getCategories = useCallback(() => {             
         CategoryService.getCategoryInfo().then(({ categories, categoryMap, subcategoryMap }) => { 
-            dispatch(setCategoryData(categories, categoryMap, subcategoryMap))             
+            categoryDispatch(setCategoryData(categories, categoryMap, subcategoryMap))             
         }).catch((error) => {
             console.error('Error retrieving categories:', error)
             snackRef.current.show(true, 'Error retrieving categories')                  
         })
     }, [])
+
+    // Create the Category Context data
+    const contextData = useMemo(() => { 
+        return { categoryState, categoryDispatch, getCategories }
+    }, [categoryState, categoryDispatch, getCategories]) 
 
     // Retrieve the categories when component first mounted
     useEffect(() => {        
@@ -50,34 +56,30 @@ export default React.memo(function Categories() {
     }, [getCategories])
         
     return (
-        <>
+        <CategoryContext.Provider value={contextData}>
             <PageHeader pageTitle="Categories" />
 
             <div className={classes.container}>
 
                 {/* Left hand side panel with category tree */}
                 <Paper elevation={2} className={classes.tree}>
-                    <CategoryToolbar
-                        dispatch={dispatch} 
-                        state={state}                                             
-                        getCategories={getCategories}/>
-
-                    <CategoryTable
-                        dispatch={dispatch}
-                        state={state}/>
+                    <CategoryToolbar/>                       
+                    <CategoryTable/>                        
                 </Paper>
 
                 {/* Right hand side panel with category/subcategory details */}
                 <div className={classes.details}>
-                    {state.selectedCategory &&
-                        <CategoryDetails category={state.selectedCategory} getCategories={getCategories} />}
-                    {state.selectedSubcategory &&
-                        <SubcategoryDetails subcategory={state.selectedSubcategory} getCategories={getCategories}
-                            parentCategory={state.categoryMap[state.selectedSubcategory.parentCategoryId]} />}
+                    {categoryState.selectedCategory &&
+                        <CategoryDetails category={categoryState.selectedCategory} />}
+
+                    {categoryState.selectedSubcategory &&
+                        <SubcategoryDetails 
+                            subcategory={categoryState.selectedSubcategory} 
+                            parentCategory={categoryState.categoryMap[categoryState.selectedSubcategory.parentCategoryId]} />}
                 </div>
             </div>
 
             <SnackMsg ref={snackRef} />
-        </>
+        </CategoryContext.Provider>
     )
 })
