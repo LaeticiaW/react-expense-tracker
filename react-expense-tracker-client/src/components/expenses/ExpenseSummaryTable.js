@@ -105,7 +105,7 @@ const ExpenseSummaryTable = React.memo(({ expenseTotals, totalAmount, expandedRo
             <>
                 {expenseTotal.subcategoryTotals.length ? (
                     expenseTotal.subcategoryTotals.sort(subcatSort).map((subcat) => (
-                        <div className={classes.row} key={subcat.categoryid + subcat.subcategoryId}>
+                        <div className={classes.row} key={expenseTotal.categoryid + subcat.subcategoryId}>
                             <div className={classes.column}>{subcat.subcategoryName}</div>
                             <div className={clsx(classes.columnAmount, classes.alignRight)}>{Util.formatAmount(subcat.totalAmount)}</div>
                         </div>
